@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, Layout, Menu } from "antd";
-import { Link } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import {
 	HomeOutlined,
 	UserOutlined,
@@ -9,7 +9,7 @@ import {
 	MenuUnfoldOutlined,
 } from "@ant-design/icons";
 import styled from "styled-components";
-import { StyledContent, StyledHeader, StyledLayout } from "./Layout.styles";
+import LayoutMain from "./components/main/LayoutPage";
 
 const { Header, Sider, Content } = Layout;
 const items = [
@@ -30,14 +30,14 @@ const items = [
 	},
 ];
 
-function MainLayout({ children, pageName }) {
+function LayoutGeneral({ children, pageName }) {
 	const [collapsed, setCollapsed] = useState(false);
 	const toggleCollapsed = () => {
 		setCollapsed(!collapsed);
 	};
 
 	return (
-		<Layout style={{ minHeight: "100vh" }}>
+		<Layout style={{ minHeight: "100vh", border: "3px solid green" }}>
 			<Sider trigger={null} collapsible collapsed={collapsed}>
 				<div className="logo" />
 				<Button
@@ -58,12 +58,10 @@ function MainLayout({ children, pageName }) {
 					items={items}
 				/>
 			</Sider>
-			<StyledLayout>
-				<StyledHeader>{pageName}asd</StyledHeader>
-				<StyledContent>{children}</StyledContent>
-			</StyledLayout>
+			{/* aca en Outlet se inyecatn las diferentes paginas */}
+			<Outlet />
 		</Layout>
 	);
 }
 
-export default MainLayout;
+export default LayoutGeneral;
