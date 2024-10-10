@@ -4,16 +4,18 @@ import LayoutGeneral from "./components/layout/LayoutGeneral";
 import Home from "./pages/home/Home";
 import { TbArrowLeft } from "react-icons/tb";
 import Well from "./pages/well/Well";
-import ActionPlan from "./pages/action-plan/ActionPlan";
+import Tasks from "./pages/tasks/Tasks";
+import { useDebugMode } from "./hooks/useDebugMode";
 
 function App() {
+	useDebugMode();
 	return (
 		<Router>
 			<Routes>
 				<Route element={<LayoutGeneral />}>
 					<Route path="/" element={<Home />} />
-					<Route path="/well/:pozoCode" element={<Well />} />
-					<Route path="/action-plan" element={<ActionPlan />} />
+					<Route path="/entity/:entityId" element={<Well />} />
+					<Route path="/tasks/:entityId" element={<Tasks />} />
 
 					{/* Add other routes as needed */}
 				</Route>

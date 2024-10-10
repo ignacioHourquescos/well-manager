@@ -37,7 +37,7 @@ function LayoutGeneral({ children, pageName }) {
 	};
 
 	return (
-		<Layout style={{ minHeight: "100vh", border: "3px solid green" }}>
+		<Layout style={{ minHeight: "100vh" }}>
 			<Sider trigger={null} collapsible collapsed={collapsed}>
 				<div className="logo" />
 				<Button

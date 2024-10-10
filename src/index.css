@@ -13,7 +13,24 @@ code {
     monospace;
 }
 
-* {
-	border: 1px solid red;
-  box-sizing: content-box;
+
+
+.debug-border * {
+  border: 1px solid red !important;
+}
+
+
+/*ANT TABLE STYLING*/
+
+.ant-table-thead > tr > th {
+  padding: 6px 2px 4px 4px !important;
+}
+
+.ant-table-tbody > tr > td {
+  padding: 4px 2px 4px 4px !important;
+}
+
+/*ANT TIPOGRAPHY / HEADER */
+.ant-typography {
+  margin: 0 !important;
 }

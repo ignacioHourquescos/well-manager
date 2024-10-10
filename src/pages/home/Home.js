@@ -1,6 +1,6 @@
 import { Typography, Layout, Table } from "antd";
 import React, { useState, useEffect } from "react";
-import { fetchArticles } from "../../services/general";
+import { fetch_entities } from "../../services/general";
 import LayoutPage from "../../components/layout/components/main/LayoutPage";
 import { Link } from "react-router-dom";
 
@@ -8,15 +8,17 @@ const { Title } = Typography;
 const { Content } = Layout;
 
 function Home() {
-	const [wells, setWells] = useState([]);
+	const [entities, setEntities] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
 
 	const columns = [
 		{
-			title: "Pozo",
+			title: "Entidad",
 			dataIndex: "pozo",
-			render: (text, record) => <Link to={`/well/${record.pozo}`}>{text}</Link>,
+			render: (text, record) => (
+				<Link to={`/entity/${record.pozo}`}>{text}</Link>
+			),
 		},
 		{
 			title: "Performance",
@@ -24,7 +26,7 @@ function Home() {
 		},
 		{
 			title: "Action Plan",
-			dataIndex: "action-plan",
+			dataIndex: "task",
 		},
 		{
 			title: "Fecha",
@@ -35,28 +37,29 @@ function Home() {
 			dataIndex: "indicators",
 		},
 		{
-			title: "Actions",
+			title: "Tareas",
 			dataIndex: "actions",
+			render: (text, record) => <Link to={`/tasks/${record.pozo}`}>Ver</Link>,
 		},
 	];
 
 	useEffect(() => {
-		async function loadArticles() {
+		async function loadEntities() {
 			try {
-				const data = await fetchArticles();
-				setWells(data);
+				const data = await fetch_entities();
+				setEntities(data);
 			} catch (err) {
 				setError("Failed to fetch articles");
 			} finally {
 				setLoading(false);
 			}
 		}
-		loadArticles();
+		loadEntities();
 	}, []);
 
 	return (
 		<LayoutPage pageName="Screening">
-			<Table columns={columns} dataSource={wells} size="middle" />
+			<Table columns={columns} dataSource={entities} size="middle" />
 		</LayoutPage>
 	);
 }
