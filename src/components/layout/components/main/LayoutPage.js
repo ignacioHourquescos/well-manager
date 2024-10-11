@@ -2,8 +2,7 @@ import React from "react";
 import { Styled } from "./LayoutPage.styles";
 import { Tabs, Typography } from "antd";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeftOutlined } from "@ant-design/icons";
-import { AppleOutlined, AndroidOutlined } from "@ant-design/icons";
+
 import { RiArrowLeftWideLine } from "react-icons/ri";
 
 const { Title } = Typography;
@@ -13,22 +12,6 @@ function LayoutPage({ pageName, children, pageActions }) {
 	const goBack = () => {
 		navigate(-1);
 	};
-
-	const items = [
-		{
-			key: "1",
-			label: "Tareas",
-			children: null,
-		},
-		{
-			key: "2",
-			label: "Historial",
-		},
-		{
-			key: "3",
-			label: "Tab adicional",
-		},
-	];
 
 	return (
 		<Styled.Inner>
@@ -50,13 +33,7 @@ function LayoutPage({ pageName, children, pageActions }) {
 				</Styled.PageTitle>
 				<Styled.PageActions>{pageActions}</Styled.PageActions>
 			</Styled.Header>
-			{pageName !== "Screening" && (
-				<Tabs
-					defaultActiveKey="1"
-					items={items}
-					style={{ padding: "0 1rem" }}
-				/>
-			)}
+
 			<Styled.Content>{children}</Styled.Content>
 		</Styled.Inner>
 	);

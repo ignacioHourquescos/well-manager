@@ -39,7 +39,7 @@ export default function FormItem({
 			{...restProps}
 		>
 			<Tooltip title={hint} placement="left" zIndex={999}>
-				<Form.Item name={name} rules={rules} width={width || "100%"}>
+				<Form.Item name={name} rules={rules} width={"100%"}>
 					{React.cloneElement(inputComponent, { ...inputProps })}
 				</Form.Item>
 

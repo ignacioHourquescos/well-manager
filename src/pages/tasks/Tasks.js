@@ -20,6 +20,11 @@ function Tasks() {
 	const location = useLocation();
 	const [actionPlan, setActionPlan] = useState("");
 	const [selectedTask, setSelectedTask] = useState(null);
+	const [activeTab, setActiveTab] = useState("1");
+
+	const handleTabChange = (key) => {
+		setActiveTab(key);
+	};
 
 	const openModal = () => {
 		setIsModalVisible(true);
@@ -68,6 +73,52 @@ function Tasks() {
 		setSelectedTask(id);
 	};
 
+	const items = [
+		{
+			key: "1",
+			label: "Tareas",
+			children: null,
+		},
+		{
+			key: "2",
+			label: "Historial",
+		},
+		{
+			key: "3",
+			label: "Tab adicional",
+		},
+	];
+
+	const renderTabContent = () => {
+		switch (activeTab) {
+			case "1":
+				return (
+					<Row gutter={24}>
+						<Col span={12}>
+							<TasksTable
+								tasks={performance === "Optimal" ? null : tasks}
+								loading={loading}
+								handleViewClick={handleViewClick}
+							/>
+						</Col>
+						<Col span={12}>
+							<AddAction
+								initialValues={selectedTask}
+								entityComments={entity_comments}
+								selectedTask={selectedTask}
+								performance={performance}
+							/>
+						</Col>
+					</Row>
+				);
+			case "2":
+				return <div>Grafico con el hisotrial del pozo</div>;
+			case "3":
+				return <div>Content for Tab adicional</div>;
+			default:
+				return null;
+		}
+	};
 	return (
 		<LayoutPage
 			pageName={`${entityId}`}
@@ -79,6 +130,15 @@ function Tasks() {
 				/>
 			}
 		>
+			<Tabs
+				defaultActiveKey="1"
+				items={items}
+				style={{ padding: "0 1rem" }}
+				onChange={handleTabChange}
+			/>
+
+			{renderTabContent()}
+
 			<Modal
 				title="Change Performance"
 				visible={isModalVisible}
@@ -89,26 +149,7 @@ function Tasks() {
 					FORMUALRIO PARA CAMBIAR DE PERFORMANCE Y ACTION PLAN CON TODAS LAS
 					VALIDACIONES NECESARIOS A DEFINIR
 				</p>
-				{/* Add your form or other content here */}
 			</Modal>
-			<Row gutter={24}>
-				<Col span={12}>
-					<TasksTable
-						tasks={performance === "Optimal" ? null : tasks}
-						loading={loading}
-						handleViewClick={handleViewClick}
-					/>
-				</Col>
-
-				<Col span={12}>
-					<AddAction
-						initialValues={selectedTask}
-						entityComments={entity_comments}
-						selectedTask={selectedTask}
-						performance={performance}
-					/>
-				</Col>
-			</Row>
 		</LayoutPage>
 	);
 }

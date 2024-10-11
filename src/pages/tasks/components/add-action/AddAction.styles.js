@@ -21,7 +21,7 @@ export const Styled = {
 
 		&::-webkit-scrollbar-thumb {
 			background: #d0d0d0; // Much lighter shade for the thumb
-			border-radius: 2px;
+			border-radius: 10px;
 		}
 
 		&::-webkit-scrollbar-thumb:hover {

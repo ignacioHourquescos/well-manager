@@ -47,6 +47,7 @@ code {
 .ant-input-textarea textarea,
 .ant-select-selector {
   border-radius: 0px !important;
+  display: block !important;
 }
 
 .ant-input:focus, .ant-input,
