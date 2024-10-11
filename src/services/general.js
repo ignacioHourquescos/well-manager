@@ -1,6 +1,9 @@
 import axios from "axios";
+import entity from "./entity.json";
+import task from "./task.json";
 
 export async function fetch_entities() {
+	return entity;
 	try {
 		const response = await axios.get(
 			process.env.REACT_APP_SERVICES + "/entity"
@@ -13,6 +16,7 @@ export async function fetch_entities() {
 }
 
 export async function fetch_actions() {
+	return entity;
 	try {
 		const response = await axios.get(process.env.REACT_APP_SERVICES + "/task");
 		return response.data;

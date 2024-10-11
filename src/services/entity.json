@@ -1,0 +1,122 @@
+[
+	{
+		"pozo": "CW-1013",
+		"performance": "Optimizable",
+		"task": "Possible potential Adjustment",
+		"fecha": "dd/mm/yyyy",
+		"indicators": {
+			"1": "green",
+			"2": "green",
+			"3": "orange"
+		},
+		"actions": "Ver"
+	},
+	{
+		"pozo": "CW-2042",
+		"performance": "Optimizable",
+		"task": "Possible potential Adjustment",
+		"fecha": "dd/mm/yyyy",
+		"indicators": {
+			"1": "green",
+			"2": "green",
+			"3": "green"
+		},
+		"actions": "Ver"
+	},
+	{
+		"pozo": "CW-2063",
+		"performance": "Reduced",
+		"task": "Further Studies",
+		"fecha": "dd/mm/yyyy",
+		"indicators": {
+			"1": "orange",
+			"2": "orange",
+			"3": "orange"
+		},
+		"actions": "Ver"
+	},
+	{
+		"pozo": "CW-2060",
+		"performance": "Reduced",
+		"task": "Water flooding Issues",
+		"fecha": "dd/mm/yyyy",
+		"indicators": {
+			"1": "green",
+			"2": "green",
+			"3": "orange"
+		},
+		"actions": "Ver"
+	},
+	{
+		"pozo": "CW-2020",
+		"performance": "Optimal",
+		"task": "No performance",
+		"fecha": "dd/mm/yyyy",
+		"indicators": {
+			"1": "green",
+			"2": "green",
+			"3": "orange"
+		},
+		"actions": "Ver"
+	},
+	{
+		"pozo": "CW-45",
+		"performance": "Reduced",
+		"task": "Operative Restrictions",
+		"fecha": "dd/mm/yyyy",
+		"indicators": {
+			"1": "orange",
+			"2": "orange",
+			"3": "orange"
+		},
+		"actions": "Ver"
+	},
+	{
+		"pozo": "CW-352",
+		"performance": "Optimal",
+		"task": "No performance",
+		"fecha": "dd/mm/yyyy",
+		"indicators": {
+			"1": "green",
+			"2": "green",
+			"3": "orange"
+		},
+		"actions": "Ver"
+	},
+	{
+		"pozo": "CW-2929",
+		"performance": "Optimal",
+		"task": "No performance",
+		"fecha": "dd/mm/yyyy",
+		"indicators": {
+			"1": "orange",
+			"2": "green",
+			"3": "orange"
+		},
+		"actions": "Ver"
+	},
+	{
+		"pozo": "CW-1424",
+		"performance": "Optimal",
+		"task": "No performance",
+		"fecha": "dd/mm/yyyy",
+		"indicators": {
+			"1": "green",
+			"2": "orange",
+			"3": "orange"
+		},
+		"actions": "Ver"
+	},
+	{
+		"pozo": "CW-3050",
+		"performance": "Reduced",
+		"task": "Non recoverable Production",
+		"fecha": "dd/mm/yyyy",
+		"indicators": {
+			"1": "green",
+			"2": "green",
+			"3": "orange"
+		},
+		"actions": "Ver"
+	}
+]
