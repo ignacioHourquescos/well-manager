@@ -39,7 +39,11 @@ function Home() {
 		{
 			title: "Tareas",
 			dataIndex: "actions",
-			render: (text, record) => <Link to={`/tasks/${record.pozo}`}>Ver</Link>,
+			render: (text, record) => (
+				<Link to={`/tasks/${record.pozo}?${record.performance}?${record.task}`}>
+					Ver
+				</Link>
+			),
 		},
 	];
 

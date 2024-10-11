@@ -15,22 +15,77 @@ code {
 
 
 
+/*VALUE FOR CUSTOM HOOK DEBUGMODE*/
 .debug-border * {
   border: 1px solid red !important;
 }
 
 
-/*ANT TABLE STYLING*/
 
+/*ANT TABLE STYLING*/
 .ant-table-thead > tr > th {
   padding: 6px 2px 4px 4px !important;
 }
 
 .ant-table-tbody > tr > td {
-  padding: 4px 2px 4px 4px !important;
+  padding: 8px 2px 4px 8px !important;
 }
+
+
 
 /*ANT TIPOGRAPHY / HEADER */
 .ant-typography {
   margin: 0 !important;
 }
+
+
+
+
+/*ANT INPUT */
+.ant-input,
+.ant-picker,
+.ant-input-textarea textarea,
+.ant-select-selector {
+  border-radius: 0px !important;
+}
+
+.ant-input:focus, .ant-input,
+.ant-picker:focus, .ant-picker,
+.ant-input-textarea textarea:focus, .ant-input-textarea textarea,
+.ant-select-selector:focus, .ant-select-selector,
+.ant-select-focused .ant-select-selector {
+  outline-color: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  border-bottom: 1px solid #d9d9d9 !important;
+}
+
+.ant-input:focus,
+.ant-picker:focus,
+.ant-input-textarea textarea:focus,
+.ant-select-focused .ant-select-selector,
+.ant-select-selector:focus {
+  border-bottom: 1px solid #d9d9d9 !important;
+}
+
+/* Additional styles for better textarea appearance */
+.ant-input-textarea textarea {
+  resize: vertical;
+  min-height: 32px;
+}
+
+/* Additional styles for better select appearance */
+.ant-select-selector {
+  padding: 0 11px !important;
+}
+
+.ant-select-selection-search-input {
+  height: 30px !important;
+}
+
+/* Ensure the dropdown arrow remains visible */
+.ant-select-arrow {
+  color: rgba(0, 0, 0, 0.25);
+}
+
+/*ANT DATE PICKER */
