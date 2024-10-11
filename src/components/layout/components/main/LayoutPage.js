@@ -39,7 +39,7 @@ function LayoutPage({ pageName, children, pageActions }) {
 							onClick={goBack}
 							style={{
 								marginRight: "10px",
-								fontSize: "2rem",
+								fontSize: "3rem",
 
 								cursor: "pointer",
 							}}
@@ -52,7 +52,7 @@ function LayoutPage({ pageName, children, pageActions }) {
 			</Styled.Header>
 			{pageName !== "Screening" && (
 				<Tabs
-					defaultActiveKey="2"
+					defaultActiveKey="1"
 					items={items}
 					style={{ padding: "0 1rem" }}
 				/>

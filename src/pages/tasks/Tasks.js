@@ -68,20 +68,6 @@ function Tasks() {
 		setSelectedTask(id);
 	};
 
-	const columns = [
-		{ title: "Task", dataIndex: "task", key: "task" },
-		{ title: "Start Date", dataIndex: "dateStart", key: "dateStart" },
-		{ title: "Finish Date", dataIndex: "dateFinish", key: "dateFinish" },
-		{ title: "Status", dataIndex: "status", key: "status" },
-		{
-			title: "Tareas",
-			dataIndex: "tasks",
-			render: (text, record) => (
-				<a onClick={() => handleViewClick(record)}>Ver</a>
-			),
-		},
-	];
-
 	return (
 		<LayoutPage
 			pageName={`${entityId}`}
@@ -108,7 +94,7 @@ function Tasks() {
 			<Row gutter={24}>
 				<Col span={12}>
 					<TasksTable
-						tasks={tasks}
+						tasks={performance === "Optimal" ? null : tasks}
 						loading={loading}
 						handleViewClick={handleViewClick}
 					/>
@@ -118,6 +104,8 @@ function Tasks() {
 					<AddAction
 						initialValues={selectedTask}
 						entityComments={entity_comments}
+						selectedTask={selectedTask}
+						performance={performance}
 					/>
 				</Col>
 			</Row>
@@ -132,11 +120,13 @@ const entity_comments = [
 		color: "gray",
 		children: (
 			<>
-				<h4 style={{ margin: 0, padding: 0 }}>Carlos Rodríguez</h4>
+				<h4 style={{ margin: 0, padding: 0 }}>
+					Carlos Rodríguez{" "}
+					<span style={{ fontWeight: "normal" }}>(2023-05-18 14:30)</span>
+				</h4>
 				<p style={{ margin: 0, padding: 0 }}>
 					Observado disminución en la tasa de producción del pozo #3.
 				</p>
-				<h7 style={{ margin: 0, padding: 0 }}>2023-05-18 14:30</h7>
 			</>
 		),
 	},
@@ -144,12 +134,14 @@ const entity_comments = [
 		color: "gray",
 		children: (
 			<>
-				<h4 style={{ margin: 0, padding: 0 }}>Ana María Gómez</h4>
+				<h4 style={{ margin: 0, padding: 0 }}>
+					Ana María Gómez{" "}
+					<span style={{ fontWeight: "normal" }}>(2023-05-20 09:15)</span>
+				</h4>
 				<p style={{ margin: 0, padding: 0 }}>
 					Realizada prueba de presión de rutina en el pozo #7. Resultados
 					normales.
 				</p>
-				<h7 style={{ margin: 0, padding: 0 }}>2023-05-20 09:15</h7>
 			</>
 		),
 	},
@@ -157,12 +149,14 @@ const entity_comments = [
 		color: "gray",
 		children: (
 			<>
-				<h4 style={{ margin: 0, padding: 0 }}>Javier Fernández</h4>
+				<h4 style={{ margin: 0, padding: 0 }}>
+					Javier Fernández{" "}
+					<span style={{ fontWeight: "normal" }}>(2023-05-25 11:45)</span>
+				</h4>
 				<p style={{ margin: 0, padding: 0 }}>
 					Iniciado trabajo de reacondicionamiento para reemplazar la bomba de
 					fondo en el pozo #5.
 				</p>
-				<h7 style={{ margin: 0, padding: 0 }}>2023-05-25 11:45</h7>
 			</>
 		),
 	},
@@ -170,12 +164,14 @@ const entity_comments = [
 		color: "gray",
 		children: (
 			<>
-				<h4 style={{ margin: 0, padding: 0 }}>Elena Martínez</h4>
+				<h4 style={{ margin: 0, padding: 0 }}>
+					Elena Martínez{" "}
+					<span style={{ fontWeight: "normal" }}>(2023-06-02 16:20)</span>
+				</h4>
 				<p style={{ margin: 0, padding: 0 }}>
 					Completado tratamiento de acidificación para mejorar la permeabilidad
 					del pozo #2.
 				</p>
-				<h7 style={{ margin: 0, padding: 0 }}>2023-06-02 16:20</h7>
 			</>
 		),
 	},
@@ -183,12 +179,14 @@ const entity_comments = [
 		color: "gray",
 		children: (
 			<>
-				<h4 style={{ margin: 0, padding: 0 }}>Ricardo Sánchez</h4>
+				<h4 style={{ margin: 0, padding: 0 }}>
+					Ricardo Sánchez{" "}
+					<span style={{ fontWeight: "normal" }}>(2023-06-10 13:05)</span>
+				</h4>
 				<p style={{ margin: 0, padding: 0 }}>
 					Ajustado el tamaño del estrangulador para optimizar la tasa de flujo
 					del pozo #9.
 				</p>
-				<h7 style={{ margin: 0, padding: 0 }}>2023-06-10 13:05</h7>
 			</>
 		),
 	},

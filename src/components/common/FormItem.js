@@ -65,6 +65,6 @@ const Label = styled.label`
 
 	${({ hasFocus }) =>
 		hasFocus
-			? "top: -10px; left: 6px;font-size:12px!important;background: transparent; color: lightgray"
+			? "top: -7px; left: 6px;font-size:10px!important;background: transparent; color: lightgray"
 			: "top:11px;"}
 `;

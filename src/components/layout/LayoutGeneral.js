@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Layout, Menu } from "antd";
+import { Button, Layout, Menu, Typography } from "antd";
 import { Outlet } from "react-router-dom";
 import {
 	HomeOutlined,
@@ -11,22 +11,18 @@ import {
 import styled from "styled-components";
 import LayoutMain from "./components/main/LayoutPage";
 
+const { Title } = Typography;
 const { Header, Sider, Content } = Layout;
 const items = [
 	{
 		key: "1",
 		icon: null,
-		label: "Option 1",
+		label: "Screening",
 	},
 	{
 		key: "2",
 		icon: null,
-		label: "Option 2",
-	},
-	{
-		key: "3",
-		icon: null,
-		label: "Option 3",
+		label: "Mis Tareas",
 	},
 ];
 
@@ -39,8 +35,10 @@ function LayoutGeneral({ children, pageName }) {
 	return (
 		<Layout style={{ minHeight: "100vh", backgroundColor: "#FFFFFF" }}>
 			<Sider trigger={null} collapsible collapsed={collapsed}>
-				<div className="logo" />
-				<Button
+				<Title level={5} style={{ color: "#FFFFFF", padding: "0.75rem" }}>
+					WELL MANAGER
+				</Title>
+				{/* <Button
 					type="primary"
 					onClick={toggleCollapsed}
 					style={{
@@ -48,13 +46,13 @@ function LayoutGeneral({ children, pageName }) {
 					}}
 				>
 					{collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-				</Button>
+				</Button> */}
 				<Menu
 					defaultSelectedKeys={["1"]}
 					defaultOpenKeys={["sub1"]}
 					mode="inline"
 					theme="dark"
-					inlineCollapsed={collapsed}
+					inlineCollapsed={false}
 					items={items}
 				/>
 			</Sider>

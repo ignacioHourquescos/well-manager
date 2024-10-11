@@ -16,9 +16,7 @@ function Home() {
 		{
 			title: "Entidad",
 			dataIndex: "pozo",
-			render: (text, record) => (
-				<Link to={`/entity/${record.pozo}`}>{text}</Link>
-			),
+			render: (text, record) => <>{text}</>,
 		},
 		{
 			title: "Performance",
@@ -63,6 +61,7 @@ function Home() {
 
 	return (
 		<LayoutPage pageName="Screening">
+			<br />
 			<Table columns={columns} dataSource={entities} size="middle" />
 		</LayoutPage>
 	);

@@ -19,7 +19,7 @@ const Content = styled.div`
 	display: flex;
 	flex-direction: column;
 	width: 100%;
-	padding-top: 2rem;
+	padding-top: 0rem;
 `;
 
 const PageActions = styled.div`

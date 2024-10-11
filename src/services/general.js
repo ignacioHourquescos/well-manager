@@ -16,7 +16,7 @@ export async function fetch_entities() {
 }
 
 export async function fetch_actions() {
-	return entity;
+	return task;
 	try {
 		const response = await axios.get(process.env.REACT_APP_SERVICES + "/task");
 		return response.data;
