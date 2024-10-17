@@ -1,25 +1,39 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import {
+	BrowserRouter as Router,
+	Route,
+	Routes,
+	useLocation,
+} from "react-router-dom";
+import { AnimatePresence } from "framer-motion";
 import LayoutGeneral from "./components/layout/LayoutGeneral";
 import Home from "./pages/home/Home";
-import { TbArrowLeft } from "react-icons/tb";
 import Well from "./pages/well/Well";
 import Tasks from "./pages/tasks/Tasks";
 import { useDebugMode } from "./hooks/useDebugMode";
+
+function AnimatedRoutes() {
+	const location = useLocation();
+
+	return (
+		<AnimatePresence mode="wait">
+			<Routes location={location} key={location.pathname}>
+				<Route element={<LayoutGeneral />}>
+					<Route path="/" element={<Home />} />
+					<Route path="/entity/:entityId" element={<Well />} />
+					<Route path="/tasks/:entityId" element={<Tasks />} />
+					{/* Add other routes as needed */}
+				</Route>
+			</Routes>
+		</AnimatePresence>
+	);
+}
 
 function App() {
 	useDebugMode();
 	return (
 		<Router>
-			<Routes>
-				<Route element={<LayoutGeneral />}>
-					<Route path="/" element={<Home />} />
-					<Route path="/entity/:entityId" element={<Well />} />
-					<Route path="/tasks/:entityId" element={<Tasks />} />
-
-					{/* Add other routes as needed */}
-				</Route>
-			</Routes>
+			<AnimatedRoutes />
 		</Router>
 	);
 }

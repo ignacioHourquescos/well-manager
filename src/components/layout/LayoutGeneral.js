@@ -9,7 +9,6 @@ import {
 	MenuUnfoldOutlined,
 } from "@ant-design/icons";
 import styled from "styled-components";
-import LayoutMain from "./components/main/LayoutPage";
 
 const { Title } = Typography;
 const { Header, Sider, Content } = Layout;

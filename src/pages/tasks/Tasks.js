@@ -1,10 +1,11 @@
 import { Typography, Layout, Row, Col, Table, Modal, Tabs } from "antd";
 import React, { useState, useEffect } from "react";
 import { fetch_actions } from "../../services/general";
-import LayoutPage from "../../components/layout/components/main/LayoutPage";
+import LayoutPage from "../../components/layout/pages/LayoutPage";
 import { useParams, useLocation } from "react-router-dom";
 import AddAction from "./components/add-action/AddAction";
 import PageActions from "./components/page-actions/PageActions";
+import { motion } from "framer-motion";
 
 import TasksTable from "./components/table/TaskTable";
 
@@ -114,43 +115,50 @@ function Tasks() {
 			case "2":
 				return <div>Grafico con el hisotrial del pozo</div>;
 			case "3":
-				return <div>Content for Tab adicional</div>;
+				return <div></div>;
 			default:
 				return null;
 		}
 	};
 	return (
-		<LayoutPage
-			pageName={`${entityId}`}
-			pageActions={
-				<PageActions
-					performance={performance}
-					actionPlan={actionPlan}
-					showPerformanceModificationModal={openModal}
-				/>
-			}
+		<motion.div
+			initial={{ opacity: 0 }}
+			animate={{ opacity: 1 }}
+			exit={{ opacity: 1 }}
+			transition={{ duration: 0.6 }}
 		>
-			<Tabs
-				defaultActiveKey="1"
-				items={items}
-				style={{ padding: "0 1rem" }}
-				onChange={handleTabChange}
-			/>
-
-			{renderTabContent()}
-
-			<Modal
-				title="Change Performance"
-				visible={isModalVisible}
-				onOk={handleOk}
-				onCancel={handleCancel}
+			<LayoutPage
+				pageName={`${entityId}`}
+				pageActions={
+					<PageActions
+						performance={performance}
+						actionPlan={actionPlan}
+						showPerformanceModificationModal={openModal}
+					/>
+				}
 			>
-				<p>
-					FORMUALRIO PARA CAMBIAR DE PERFORMANCE Y ACTION PLAN CON TODAS LAS
-					VALIDACIONES NECESARIOS A DEFINIR
-				</p>
-			</Modal>
-		</LayoutPage>
+				<Tabs
+					defaultActiveKey="1"
+					items={items}
+					style={{ padding: "0 1rem" }}
+					onChange={handleTabChange}
+				/>
+
+				{renderTabContent()}
+
+				<Modal
+					title="Change Performance"
+					visible={isModalVisible}
+					onOk={handleOk}
+					onCancel={handleCancel}
+				>
+					<p>
+						FORMUALRIO PARA CAMBIAR DE PERFORMANCE Y ACTION PLAN CON TODAS LAS
+						VALIDACIONES NECESARIOS A DEFINIR
+					</p>
+				</Modal>
+			</LayoutPage>
+		</motion.div>
 	);
 }
 

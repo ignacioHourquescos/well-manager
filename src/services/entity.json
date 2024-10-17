@@ -1,9 +1,15 @@
 [
 	{
-		"pozo": "CW-1013",
-		"performance": "Optimizable",
-		"task": "Possible potential Adjustment",
-		"fecha": "dd/mm/yyyy",
+		"entity": "CW-1013",
+		"performance": {
+			"code": "improve",
+			"label": "≜ Improve"
+		},
+		"action_plan": {
+			"code": "possible_potential_adjustment",
+			"label": "Possible potential Adjustment"
+		},
+		"date": "17/03/2024",
 		"indicators": {
 			"1": "green",
 			"2": "green",
@@ -12,10 +18,16 @@
 		"actions": "Ver"
 	},
 	{
-		"pozo": "CW-2042",
-		"performance": "Optimizable",
-		"task": "Possible potential Adjustment",
-		"fecha": "dd/mm/yyyy",
+		"entity": "CW-6978",
+		"performance": {
+			"code": "normal",
+			"label": "⁓ Normal"
+		},
+		"action_plan": {
+			"code": "no_performance",
+			"label": "No performance"
+		},
+		"date": "02/09/2024",
 		"indicators": {
 			"1": "green",
 			"2": "green",
@@ -24,10 +36,16 @@
 		"actions": "Ver"
 	},
 	{
-		"pozo": "CW-2063",
-		"performance": "Reduced",
-		"task": "Further Studies",
-		"fecha": "dd/mm/yyyy",
+		"entity": "CW-2063",
+		"performance": {
+			"code": "poor",
+			"label": "‼ Issue"
+		},
+		"action_plan": {
+			"code": "further_studies",
+			"label": "Further Studies"
+		},
+		"date": "11/06/2024",
 		"indicators": {
 			"1": "orange",
 			"2": "orange",
@@ -36,10 +54,16 @@
 		"actions": "Ver"
 	},
 	{
-		"pozo": "CW-2060",
-		"performance": "Reduced",
-		"task": "Water flooding Issues",
-		"fecha": "dd/mm/yyyy",
+		"entity": "CW-2484",
+		"performance": {
+			"code": "improve",
+			"label": "≜ Improve"
+		},
+		"action_plan": {
+			"code": "water_flooding_issues",
+			"label": "Water flooding Issues"
+		},
+		"date": "29/11/2024",
 		"indicators": {
 			"1": "green",
 			"2": "green",
@@ -48,10 +72,16 @@
 		"actions": "Ver"
 	},
 	{
-		"pozo": "CW-2020",
-		"performance": "Optimal",
-		"task": "No performance",
-		"fecha": "dd/mm/yyyy",
+		"entity": "CW-2020",
+		"performance": {
+			"code": "normal",
+			"label": "⁓ Normal"
+		},
+		"action_plan": {
+			"code": "no_performance",
+			"label": "No performance"
+		},
+		"date": "08/04/2024",
 		"indicators": {
 			"1": "green",
 			"2": "green",
@@ -60,10 +90,16 @@
 		"actions": "Ver"
 	},
 	{
-		"pozo": "CW-45",
-		"performance": "Reduced",
-		"task": "Operative Restrictions",
-		"fecha": "dd/mm/yyyy",
+		"entity": "CW-2848",
+		"performance": {
+			"code": "poor",
+			"label": "‼ Issue"
+		},
+		"action_plan": {
+			"code": "operative_restrictions",
+			"label": "Operative Restrictions"
+		},
+		"date": "23/07/2024",
 		"indicators": {
 			"1": "orange",
 			"2": "orange",
@@ -72,10 +108,16 @@
 		"actions": "Ver"
 	},
 	{
-		"pozo": "CW-352",
-		"performance": "Optimal",
-		"task": "No performance",
-		"fecha": "dd/mm/yyyy",
+		"entity": "CW-4257",
+		"performance": {
+			"code": "normal",
+			"label": "⁓ Normal"
+		},
+		"action_plan": {
+			"code": "no_performance",
+			"label": "No performance"
+		},
+		"date": "14/02/2024",
 		"indicators": {
 			"1": "green",
 			"2": "green",
@@ -84,10 +126,16 @@
 		"actions": "Ver"
 	},
 	{
-		"pozo": "CW-2929",
-		"performance": "Optimal",
-		"task": "No performance",
-		"fecha": "dd/mm/yyyy",
+		"entity": "CW-8682",
+		"performance": {
+			"code": "improve",
+			"label": "≜ Improve"
+		},
+		"action_plan": {
+			"code": "possible_potential_adjustment",
+			"label": "Possible potential Adjustment"
+		},
+		"date": "05/10/2024",
 		"indicators": {
 			"1": "orange",
 			"2": "green",
@@ -96,10 +144,16 @@
 		"actions": "Ver"
 	},
 	{
-		"pozo": "CW-1424",
-		"performance": "Optimal",
-		"task": "No performance",
-		"fecha": "dd/mm/yyyy",
+		"entity": "CW-4842",
+		"performance": {
+			"code": "normal",
+			"label": "⁓ Normal"
+		},
+		"action_plan": {
+			"code": "no_performance",
+			"label": "No performance"
+		},
+		"date": "19/05/2024",
 		"indicators": {
 			"1": "green",
 			"2": "orange",
@@ -108,10 +162,124 @@
 		"actions": "Ver"
 	},
 	{
-		"pozo": "CW-3050",
-		"performance": "Reduced",
-		"task": "Non recoverable Production",
-		"fecha": "dd/mm/yyyy",
+		"entity": "CW-6848",
+		"performance": {
+			"code": "poor",
+			"label": "‼ Issue"
+		},
+		"action_plan": {
+			"code": "non_recoverable_production",
+			"label": "Non recoverable Production"
+		},
+		"date": "30/08/2024",
+		"indicators": {
+			"1": "green",
+			"2": "green",
+			"3": "orange"
+		},
+		"actions": "Ver"
+	},
+	{
+		"entity": "CW-2929",
+		"performance": {
+			"code": "improve",
+			"label": "≜ Improve"
+		},
+		"action_plan": {
+			"code": "water_flooding_issues",
+			"label": "Water flooding Issues"
+		},
+		"date": "07/01/2024",
+		"indicators": {
+			"1": "orange",
+			"2": "green",
+			"3": "orange"
+		},
+		"actions": "Ver"
+	},
+	{
+		"entity": "CW-7424",
+		"performance": {
+			"code": "normal",
+			"label": "⁓ Normal"
+		},
+		"action_plan": {
+			"code": "no_performance",
+			"label": "No performance"
+		},
+		"date": "26/12/2024",
+		"indicators": {
+			"1": "green",
+			"2": "orange",
+			"3": "orange"
+		},
+		"actions": "Ver"
+	},
+	{
+		"entity": "CW-3478",
+		"performance": {
+			"code": "poor",
+			"label": "‼ Issue"
+		},
+		"action_plan": {
+			"code": "non_recoverable_production",
+			"label": "Non recoverable Production"
+		},
+		"date": "03/03/2024",
+		"indicators": {
+			"1": "green",
+			"2": "green",
+			"3": "orange"
+		},
+		"actions": "Ver"
+	},
+	{
+		"entity": "CW-7334",
+		"performance": {
+			"code": "improve",
+			"label": "≜ Improve"
+		},
+		"action_plan": {
+			"code": "further_studies",
+			"label": "Further Studies"
+		},
+		"date": "21/09/2024",
+		"indicators": {
+			"1": "orange",
+			"2": "green",
+			"3": "orange"
+		},
+		"actions": "Ver"
+	},
+	{
+		"entity": "CW-1245",
+		"performance": {
+			"code": "normal",
+			"label": "⁓ Normal"
+		},
+		"action_plan": {
+			"code": "no_performance",
+			"label": "No performance"
+		},
+		"date": "15/04/2024",
+		"indicators": {
+			"1": "green",
+			"2": "orange",
+			"3": "orange"
+		},
+		"actions": "Ver"
+	},
+	{
+		"entity": "CW-1924",
+		"performance": {
+			"code": "poor",
+			"label": "‼ Issue"
+		},
+		"action_plan": {
+			"code": "non_recoverable_production",
+			"label": "Non recoverable Production"
+		},
+		"date": "09/11/2024",
 		"indicators": {
 			"1": "green",
 			"2": "green",

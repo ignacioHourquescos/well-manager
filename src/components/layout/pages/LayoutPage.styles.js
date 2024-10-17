@@ -25,19 +25,39 @@ const Content = styled.div`
 const PageActions = styled.div`
 	display: flex;
 	flex-direction: row;
-
 	width: 100%;
 `;
 
 const PageTitle = styled.div`
 	display: flex;
-	width: 35%;
+	width: 65%;
 `;
 
+const FlexInner = styled.div`
+	display: flex;
+	flex-direction: row;
+	background-color: red;
+`;
+
+const Sidebar = styled.div`
+	width: 15%;
+	padding: 1.3% 1.5%;
+	background-color: #ffffff;
+	position: relative;
+	border-right: 1px solid #e0e0e0;
+`;
+
+const Main = styled.main`
+	flex: 1;
+	width: 85%;
+`;
 export const Styled = {
 	Inner,
 	Header,
 	Content,
 	PageActions,
 	PageTitle,
+	FlexInner,
+	Sidebar,
+	Main,
 };

@@ -9,7 +9,6 @@ import {
 	Col,
 	Timeline,
 	Typography,
-	Space,
 	Empty,
 } from "antd";
 import { Styled } from "./AddAction.styles";
@@ -24,7 +23,6 @@ function AddAction({
 	selectedTask,
 	performance,
 }) {
-	const [componentVariant, setComponentVariant] = useState("filled");
 	const [form] = Form.useForm();
 	const [newTask, setNewTask] = useState(false);
 	const formValues = Form.useWatch([], form);
@@ -36,6 +34,7 @@ function AddAction({
 		form.setFieldsValue(initialValues);
 	}, [initialValues, form]);
 
+	//CALCULA LA CANIDAD DE FILAS PARA NOTAS
 	const calculateRows = useMemo(() => {
 		if (!formValues?.notes) return 1;
 		const lineBreaks = (formValues.notes.match(/\n/g) || []).length;

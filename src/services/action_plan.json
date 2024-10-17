@@ -1,0 +1,26 @@
+[
+	{
+		"code": "possible_potential_adjustment",
+		"label": "Possible potential Adjustment"
+	},
+	{
+		"code": "further_studies",
+		"label": "Further Studies"
+	},
+	{
+		"code": "water_flooding_issues",
+		"label": "Water flooding Issues"
+	},
+	{
+		"code": "no_performance",
+		"label": "No performance"
+	},
+	{
+		"code": "operative_restrictions",
+		"label": "Operative Restrictions"
+	},
+	{
+		"code": "non_recoverable_production",
+		"label": "Non recoverable Production"
+	}
+]
