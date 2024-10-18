@@ -16,12 +16,14 @@ function Home() {
 	const [error, setError] = useState(null);
 	const [drawerVisible, setDrawerVisible] = useState(false);
 	const [selectedEntityTasks, setSelectedEntityTasks] = useState([]);
+	const [selectedEntity, setSelectedEntity] = useState(null);
 
-	const showTasksDrawer = async (entityId) => {
+	const showTasksDrawer = async (entity) => {
 		setLoading(true);
 		try {
 			setSelectedEntityTasks(tasks);
 			setDrawerVisible(true);
+			setSelectedEntity(entity);
 		} catch (err) {
 			setError("Failed to fetch tasks");
 		} finally {
@@ -35,6 +37,7 @@ function Home() {
 			dataIndex: "entity",
 			render: (text, record) => (
 				<Link
+					style={{ color: "#13C4A3" }}
 					to={`/tasks/${record.entity}?${record.performance.code}?${record.action_plan.label}`}
 				>
 					{text}
@@ -63,10 +66,31 @@ function Home() {
 			title: "Tareas",
 			dataIndex: "actions",
 			render: (text, record) => (
-				<a onClick={() => showTasksDrawer(record.entity)}>Ver</a>
+				<a onClick={() => showTasksDrawer(record)}>Tareas</a>
 			),
 		},
 	];
+
+	const drawerTitle = (
+		<div
+			style={{
+				display: "flex",
+				justifyContent: "space-between",
+				alignItems: "center",
+				width: "100%",
+			}}
+		>
+			<span>Tareas Pendientes</span>
+			{selectedEntity && (
+				<Link
+					to={`/tasks/${selectedEntity.entity}?${selectedEntity.performance.code}?${selectedEntity.action_plan.label}`}
+					style={{ fontSize: "14px" }}
+				>
+					Ver más detalle →
+				</Link>
+			)}
+		</div>
+	);
 
 	useEffect(() => {
 		async function loadEntities() {
@@ -113,6 +137,8 @@ function Home() {
 				return "red";
 			case "InProgress":
 				return "blue";
+			case "Done":
+				return "green";
 			default:
 				return "default";
 		}
@@ -137,7 +163,7 @@ function Home() {
 			/>
 
 			<Drawer
-				title="Tareas Pendientes"
+				title={drawerTitle}
 				placement="right"
 				onClose={() => setDrawerVisible(false)}
 				visible={drawerVisible}
@@ -148,22 +174,21 @@ function Home() {
 					itemLayout="horizontal"
 					dataSource={selectedEntityTasks}
 					renderItem={(item) => (
-						<List.Item>
-							<List.Item.Meta
-								title={
-									<span>
-										<Tag
-											color={getStatusColor(item.status)}
-											style={{ marginLeft: 8 }}
-										>
-											{item.status}
-										</Tag>
-										{item.task}
-									</span>
-								}
-								description={<></>}
-							/>
-						</List.Item>
+						<div
+							style={{
+								marginBottom: "10px",
+								borderBottom: "1px solid #e8e8e8",
+								paddingBottom: "10px",
+							}}
+						>
+							<Tag
+								color={getStatusColor(item.status)}
+								style={{ marginLeft: 8 }}
+							>
+								{item.status}
+							</Tag>
+							<span style={{ textAlign: "left" }}>{item.task}</span>
+						</div>
 					)}
 				/>
 			</Drawer>

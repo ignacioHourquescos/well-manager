@@ -96,10 +96,11 @@ code {
 /*ANT MENU */
 .ant-menu-item-selected {
   background-color: #001529 !important;
-  border-right: 8px solid #007BFF !important;
+  border-right: 8px solid #e7e247 !important;
   border-radius: 0px !important;
   margin:0px !important;
   width: 100% !important;
+  color:#e7e247 !important;
 }
 
 .ant-menu-item {

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
 	BrowserRouter as Router,
 	Route,
@@ -12,9 +12,18 @@ import Well from "./pages/well/Well";
 import Tasks from "./pages/tasks/Tasks";
 import PersonalTasks from "./pages/personal-tasks/PersonalTasks";
 import { useDebugMode } from "./hooks/useDebugMode";
+import SplashScreen from "./components/splash-screen/SplashScreen";
 
 function AnimatedRoutes() {
 	const location = useLocation();
+	const [showSplash, setShowSplash] = useState(true);
+	const handleDismissSplash = () => {
+		setShowSplash(false);
+	};
+
+	if (showSplash) {
+		return <SplashScreen onDismiss={handleDismissSplash} />;
+	}
 
 	return (
 		<AnimatePresence mode="wait">
