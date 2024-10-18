@@ -114,3 +114,13 @@ code {
   color: white !important;
 }
 
+
+
+/*ANT BUTTON */
+.ant-btn-color-primary{
+  color: #19519f !important;
+  font-weight: 400 !important;
+  box-shadow: none !important;
+  background-color: #19519f10 !important;
+  border-radius: 3px !important;
+}

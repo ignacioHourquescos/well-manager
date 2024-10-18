@@ -37,7 +37,7 @@ function Home() {
 			dataIndex: "entity",
 			render: (text, record) => (
 				<Link
-					style={{ color: "#13C4A3" }}
+					style={{ color: "#19519f", fontWeight: "600" }}
 					to={`/tasks/${record.entity}?${record.performance.code}?${record.action_plan.label}`}
 				>
 					{text}
@@ -66,7 +66,12 @@ function Home() {
 			title: "Tareas",
 			dataIndex: "actions",
 			render: (text, record) => (
-				<a onClick={() => showTasksDrawer(record)}>Tareas</a>
+				<a
+					style={{ color: "#19519f", fontWeight: "600" }}
+					onClick={() => showTasksDrawer(record)}
+				>
+					Tareas
+				</a>
 			),
 		},
 	];
