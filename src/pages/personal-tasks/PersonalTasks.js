@@ -96,7 +96,9 @@ function Home() {
 			type="standard-layout"
 		>
 			<br />
-
+			<h3 style={{ color: "red" }}>
+				ACA VAN LAS TAREAS NO LAS ENTIDADES. ACORREGIR
+			</h3>
 			<Table
 				columns={columns}
 				dataSource={filteredEntities}
