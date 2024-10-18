@@ -1,10 +1,8 @@
-import { Typography, Layout, Drawer, Table, List, Tag } from "antd";
+import { Typography, Layout, Table } from "antd";
 import React, { useState, useEffect } from "react";
 import { fetch_entities } from "../../services/general";
-import tasks from "../../services/task.json";
 import LayoutPage from "../../components/layout/pages/LayoutPage";
 import { Link } from "react-router-dom";
-import SearchMenu from "./components/SearchMenu";
 
 const { Title } = Typography;
 const { Content } = Layout;
@@ -14,32 +12,12 @@ function Home() {
 	const [filteredEntities, setFilteredEntities] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
-	const [drawerVisible, setDrawerVisible] = useState(false);
-	const [selectedEntityTasks, setSelectedEntityTasks] = useState([]);
-
-	const showTasksDrawer = async (entityId) => {
-		setLoading(true);
-		try {
-			setSelectedEntityTasks(tasks);
-			setDrawerVisible(true);
-		} catch (err) {
-			setError("Failed to fetch tasks");
-		} finally {
-			setLoading(false);
-		}
-	};
 
 	const columns = [
 		{
 			title: "Entidad",
 			dataIndex: "entity",
-			render: (text, record) => (
-				<Link
-					to={`/tasks/${record.entity}?${record.performance.code}?${record.action_plan.label}`}
-				>
-					{text}
-				</Link>
-			),
+			render: (text, record) => <>{text}</>,
 		},
 		{
 			title: "Performance",
@@ -63,7 +41,11 @@ function Home() {
 			title: "Tareas",
 			dataIndex: "actions",
 			render: (text, record) => (
-				<a onClick={() => showTasksDrawer(record.entity)}>Ver</a>
+				<Link
+					to={`/tasks/${record.entity}?${record.performance.code}?${record.action_plan.label}`}
+				>
+					Ver
+				</Link>
 			),
 		},
 	];
@@ -107,23 +89,11 @@ function Home() {
 		}, delay);
 	};
 
-	const getStatusColor = (status) => {
-		switch (status) {
-			case "Block":
-				return "red";
-			case "InProgress":
-				return "blue";
-			default:
-				return "default";
-		}
-	};
-
 	return (
 		<LayoutPage
-			pageName="Screening"
+			pageName="Mis Tareass"
 			secondaryTitle="Listado de Entidades"
-			type="side-bar-layout"
-			sidebar={<SearchMenu onFilter={filterEntities} />}
+			type="standard-layout"
 		>
 			<br />
 
@@ -133,40 +103,7 @@ function Home() {
 				size="middle"
 				pagination={{ pageSize: 13 }}
 				loading={loading}
-				style={{ padding: "1%" }}
 			/>
-
-			<Drawer
-				title="Tareas Pendientes"
-				placement="right"
-				onClose={() => setDrawerVisible(false)}
-				visible={drawerVisible}
-				width={500}
-			>
-				{" "}
-				<List
-					itemLayout="horizontal"
-					dataSource={selectedEntityTasks}
-					renderItem={(item) => (
-						<List.Item>
-							<List.Item.Meta
-								title={
-									<span>
-										<Tag
-											color={getStatusColor(item.status)}
-											style={{ marginLeft: 8 }}
-										>
-											{item.status}
-										</Tag>
-										{item.task}
-									</span>
-								}
-								description={<></>}
-							/>
-						</List.Item>
-					)}
-				/>
-			</Drawer>
 		</LayoutPage>
 	);
 }

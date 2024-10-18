@@ -72,6 +72,7 @@ const SearchMenu = ({ onFilter }) => {
 						/>
 					</Col>
 				</Row>
+				<br />
 				<Row>
 					<Col span={24}>
 						<Button

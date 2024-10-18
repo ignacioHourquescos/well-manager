@@ -22,7 +22,7 @@ function LayoutPage({
 
 	const renderContent = (contentTitle) => (
 		<>
-			<Styled.Header>
+			<Styled.HeaderStandard>
 				<Styled.PageTitle>
 					{pageName !== "Screening" && (
 						<RiArrowLeftWideLine
@@ -37,7 +37,7 @@ function LayoutPage({
 					<Title level={3}>{contentTitle}</Title>
 				</Styled.PageTitle>
 				<Styled.PageActions>{pageActions}</Styled.PageActions>
-			</Styled.Header>
+			</Styled.HeaderStandard>
 			<Styled.Content>{children}</Styled.Content>
 		</>
 	);
@@ -47,7 +47,7 @@ function LayoutPage({
 			<>
 				<Styled.Sidebar>
 					{/* Add your sidebar content here */}
-					<Styled.Header>
+					<Styled.HeaderSideMenu>
 						<Styled.PageTitle style={{ width: "100%" }}>
 							{pageName !== "Screening" && (
 								<RiArrowLeftWideLine
@@ -61,7 +61,7 @@ function LayoutPage({
 							)}
 							<Title level={3}>{pageName}</Title>
 						</Styled.PageTitle>
-					</Styled.Header>
+					</Styled.HeaderSideMenu>
 					{sidebar}
 				</Styled.Sidebar>
 

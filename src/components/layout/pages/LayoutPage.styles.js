@@ -6,13 +6,21 @@ const Inner = styled.div`
 	width: 95%;
 	margin: 2% 2.5%;
 `;
-const Header = styled.header`
+const HeaderStandard = styled.header`
 	display: flex;
 	align-items: center;
 	align-content: center;
 
-	line-height: 3rem;
+	line-height: 2rem;
 
+	height: 3rem; // Add a fixed height to ensure vertical centering
+`;
+
+const HeaderSideMenu = styled.header`
+	display: flex;
+	align-items: center;
+	align-content: center;
+	line-height: 2rem;
 	height: 4rem; // Add a fixed height to ensure vertical centering
 `;
 const Content = styled.div`
@@ -40,8 +48,8 @@ const FlexInner = styled.div`
 `;
 
 const Sidebar = styled.div`
-	width: 15%;
-	padding: 1.3% 1.5%;
+	width: 21%;
+	padding: 1.3% 3%;
 	background-color: #ffffff;
 	position: relative;
 	border-right: 1px solid #e0e0e0;
@@ -49,11 +57,12 @@ const Sidebar = styled.div`
 
 const Main = styled.main`
 	flex: 1;
-	width: 85%;
+	width: 79%;
 `;
 export const Styled = {
 	Inner,
-	Header,
+	HeaderStandard,
+	HeaderSideMenu,
 	Content,
 	PageActions,
 	PageTitle,

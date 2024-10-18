@@ -10,6 +10,7 @@ import LayoutGeneral from "./components/layout/LayoutGeneral";
 import Home from "./pages/home/Home";
 import Well from "./pages/well/Well";
 import Tasks from "./pages/tasks/Tasks";
+import PersonalTasks from "./pages/personal-tasks/PersonalTasks";
 import { useDebugMode } from "./hooks/useDebugMode";
 
 function AnimatedRoutes() {
@@ -22,6 +23,7 @@ function AnimatedRoutes() {
 					<Route path="/" element={<Home />} />
 					<Route path="/entity/:entityId" element={<Well />} />
 					<Route path="/tasks/:entityId" element={<Tasks />} />
+					<Route path="/my-tasks" element={<PersonalTasks />} />
 					{/* Add other routes as needed */}
 				</Route>
 			</Routes>

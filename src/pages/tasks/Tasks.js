@@ -8,6 +8,7 @@ import PageActions from "./components/page-actions/PageActions";
 import { motion } from "framer-motion";
 
 import TasksTable from "./components/table/TaskTable";
+import History from "./components/history/History";
 
 const { Title } = Typography;
 
@@ -83,6 +84,7 @@ function Tasks() {
 		{
 			key: "2",
 			label: "Historial",
+			children: <History />,
 		},
 		{
 			key: "3",
@@ -121,44 +123,37 @@ function Tasks() {
 		}
 	};
 	return (
-		<motion.div
-			initial={{ opacity: 0 }}
-			animate={{ opacity: 1 }}
-			exit={{ opacity: 1 }}
-			transition={{ duration: 0.6 }}
-		>
-			<LayoutPage
-				pageName={`${entityId}`}
-				pageActions={
-					<PageActions
-						performance={performance}
-						actionPlan={actionPlan}
-						showPerformanceModificationModal={openModal}
-					/>
-				}
-			>
-				<Tabs
-					defaultActiveKey="1"
-					items={items}
-					style={{ padding: "0 1rem" }}
-					onChange={handleTabChange}
+		<LayoutPage
+			pageName={`${entityId}`}
+			pageActions={
+				<PageActions
+					performance={performance}
+					actionPlan={actionPlan}
+					showPerformanceModificationModal={openModal}
 				/>
+			}
+		>
+			<Tabs
+				defaultActiveKey="1"
+				items={items}
+				style={{ padding: "0 1rem" }}
+				onChange={handleTabChange}
+			/>
 
-				{renderTabContent()}
+			{renderTabContent()}
 
-				<Modal
-					title="Change Performance"
-					visible={isModalVisible}
-					onOk={handleOk}
-					onCancel={handleCancel}
-				>
-					<p>
-						FORMUALRIO PARA CAMBIAR DE PERFORMANCE Y ACTION PLAN CON TODAS LAS
-						VALIDACIONES NECESARIOS A DEFINIR
-					</p>
-				</Modal>
-			</LayoutPage>
-		</motion.div>
+			<Modal
+				title="Change Performance"
+				visible={isModalVisible}
+				onOk={handleOk}
+				onCancel={handleCancel}
+			>
+				<p>
+					FORMUALRIO PARA CAMBIAR DE PERFORMANCE Y ACTION PLAN CON TODAS LAS
+					VALIDACIONES NECESARIOS A DEFINIR
+				</p>
+			</Modal>
+		</LayoutPage>
 	);
 }
 
