@@ -33,7 +33,7 @@ function LayoutGeneral({}) {
 	};
 
 	return (
-		<Layout style={{ minHeight: "100vh", backgroundColor: "#FFFFFF" }}>
+		<Layout style={{ minHeight: "100vh", backgroundColor: "transparent" }}>
 			<Sider
 				trigger={null}
 				collapsible

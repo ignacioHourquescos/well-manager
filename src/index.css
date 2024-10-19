@@ -4,6 +4,8 @@ body {
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
+  /* background-color: #f0eff454; */
+   
 
 
 }
@@ -15,6 +17,7 @@ code {
 
 
 
+
 /*VALUE FOR CUSTOM HOOK DEBUGMODE*/
 .debug-border * {
   border: 1px solid red !important;
@@ -23,13 +26,16 @@ code {
 
 
 /*ANT TABLE STYLING*/
+.ant-table-tbody{background-color: #f0eff454 !important;}
 .ant-table-thead > tr > th {
   padding: 6px 2px 4px 4px !important;
+  background-color: #f0eff4 !important;
 }
 
 .ant-table-tbody > tr > td {
   padding: 8px 2px 4px 8px !important;
 }
+
 
 
 
