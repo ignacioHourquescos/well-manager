@@ -17,17 +17,17 @@ function Home() {
 		{
 			title: "Entidad",
 			dataIndex: "entity",
-			render: (text, record) => <>{text}</>,
+			render: (text, record) => <>{record.id}</>,
 		},
 		{
 			title: "Performance",
 			dataIndex: "performance",
-			render: (performance) => performance.label,
+			render: (performance) => performance,
 		},
 		{
 			title: "Action Plan",
 			dataIndex: "action_plan",
-			render: (action_plan) => action_plan.label,
+			render: (action_plan) => action_plan,
 		},
 		{
 			title: "Fecha",
@@ -42,7 +42,7 @@ function Home() {
 			dataIndex: "actions",
 			render: (text, record) => (
 				<Link
-					to={`/tasks/${record.entity}?${record.performance.code}?${record.action_plan.label}`}
+					to={`/tasks/${record.entity}?${record.performance}?${record.action_plan}`}
 				>
 					Ver
 				</Link>

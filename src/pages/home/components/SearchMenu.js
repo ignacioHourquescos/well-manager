@@ -4,16 +4,19 @@ import { Inner } from "./SearchMenu.styles";
 import FormItem from "../../../components/common/FormItem";
 import performance from "../../../services/performance.json";
 import actionPlan from "../../../services/action_plan.json";
+import { useFilters } from "../../../context/FilterContext";
 
 const { Option } = Select;
 const SearchMenu = ({ onFilter }) => {
 	const [form] = Form.useForm();
+	const { setFilters } = useFilters();
 
 	const formValues = Form.useWatch([], form);
 	console.log(performance);
 
 	const onFinish = (values) => {
 		console.log(values);
+		setFilters(values);
 		onFilter(values);
 	};
 

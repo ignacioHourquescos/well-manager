@@ -1,14 +1,16 @@
 import { Typography, Layout, Row, Col, Table, Modal, Tabs } from "antd";
 import React, { useState, useEffect } from "react";
-import { fetch_actions } from "../../services/general";
+import { fetch_action_plans } from "../../services/general";
 import LayoutPage from "../../components/layout/pages/LayoutPage";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import AddAction from "./components/add-action/AddAction";
 import PageActions from "./components/page-actions/PageActions";
 import { motion } from "framer-motion";
 
 import TasksTable from "./components/table/TaskTable";
 import History from "./components/history/History";
+import { RiArrowLeftWideLine } from "react-icons/ri";
+import { Styled } from "./Tasks.styles";
 
 const { Title } = Typography;
 
@@ -23,6 +25,7 @@ function Tasks() {
 	const [actionPlan, setActionPlan] = useState("");
 	const [selectedTask, setSelectedTask] = useState(null);
 	const [activeTab, setActiveTab] = useState("1");
+	const navigate = useNavigate();
 
 	const handleTabChange = (key) => {
 		setActiveTab(key);
@@ -44,7 +47,7 @@ function Tasks() {
 	useEffect(() => {
 		async function loadActions() {
 			try {
-				const data = await fetch_actions();
+				const data = await fetch_action_plans();
 				setTasks(data);
 			} catch (err) {
 				setError("Failed to fetch actions");
@@ -123,20 +126,18 @@ function Tasks() {
 		}
 	};
 	return (
-		<LayoutPage
-			pageName={`${entityId}`}
-			pageActions={
-				<PageActions
-					performance={performance}
-					actionPlan={actionPlan}
-					showPerformanceModificationModal={openModal}
-				/>
-			}
-		>
+		<LayoutPage pageName={`${entityId}`}>
+			<PageActions
+				entityId={entityId}
+				performance={performance}
+				actionPlan={actionPlan}
+				showPerformanceModificationModal={openModal}
+			/>
+
 			<Tabs
 				defaultActiveKey="1"
 				items={items}
-				style={{ padding: "0 1rem" }}
+				style={{ padding: "0rem" }}
 				onChange={handleTabChange}
 			/>
 

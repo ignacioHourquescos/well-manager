@@ -4,8 +4,9 @@ import { Outlet, useNavigate, useLocation } from "react-router-dom";
 
 import { Styled } from "./LayoutGeneral.styles";
 import { RiArrowLeftWideLine, RiArrowRightWideLine } from "react-icons/ri";
+import GeneralFilter from "./general-filter/GeneralFilter";
 
-const { Sider } = Layout;
+const { Sider, Header, Content } = Layout;
 const items = [
 	{
 		key: "/",
@@ -20,20 +21,32 @@ const items = [
 ];
 
 function LayoutGeneral({}) {
-	const [collapsed, setCollapsed] = useState(false);
+	const [collapsed, setCollapsed] = useState(() => {
+		const savedState = localStorage.getItem("siderCollapsed");
+		return savedState ? JSON.parse(savedState) : false;
+	});
 	const navigate = useNavigate();
 	const location = useLocation();
 
 	const toggleCollapsed = () => {
-		setCollapsed(!collapsed);
+		const newState = !collapsed;
+		setCollapsed(newState);
+		localStorage.setItem("siderCollapsed", JSON.stringify(newState));
 	};
 
 	const handleMenuClick = (e) => {
 		navigate(e.key);
 	};
 
+	const shouldShowFilter = !location.pathname.includes("/tasks/");
+
 	return (
-		<Layout style={{ minHeight: "100vh", backgroundColor: "transparent" }}>
+		<Layout
+			style={{
+				minHeight: "100vh",
+				backgroundColor: "transparent",
+			}}
+		>
 			<Sider
 				trigger={null}
 				collapsible
@@ -57,34 +70,23 @@ function LayoutGeneral({}) {
 					onClick={handleMenuClick}
 				/>
 			</Sider>
-			{/* aca en Outlet se inyecatn las diferentes paginas */}
-			<Outlet />
+			<Layout>
+				{shouldShowFilter && <GeneralFilter />}
+
+				<Content>
+					<div
+						style={{
+							display: "flex",
+							justifyContent: "center",
+							height: "100%",
+						}}
+					>
+						<Outlet />
+					</div>
+				</Content>
+			</Layout>
 		</Layout>
 	);
 }
 
 export default LayoutGeneral;
-
-{
-	/* Commented out for now
-					{collapsed ? (
-						<RiArrowRightWideLine
-							style={{
-								fontSize: "2rem",
-								cursor: "pointer",
-
-								color: "white",
-							}}
-						/>
-					) : (
-						<RiArrowLeftWideLine
-							style={{
-								fontSize: "2rem",
-								cursor: "pointer",
-
-								color: "white",
-							}}
-						/>
-					)}
-					*/
-}

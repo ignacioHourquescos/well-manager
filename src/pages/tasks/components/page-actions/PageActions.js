@@ -1,6 +1,8 @@
 import { Button, Statistic, Typography } from "antd";
 import React from "react";
-import { FlexContainer, StatisticsContainer } from "./PageActions.styles.js";
+import { Styled } from "./PageActions.styles.js";
+import { useNavigate } from "react-router-dom";
+import { RiArrowLeftWideLine } from "react-icons/ri";
 
 const { Title } = Typography;
 
@@ -9,9 +11,23 @@ const PageActions = ({
 	showPerformanceModificationModal,
 	...props
 }) => {
+	const navigate = useNavigate();
 	return (
-		<FlexContainer {...props}>
-			<StatisticsContainer>
+		<Styled.FlexContainer {...props}>
+			<Styled.PageTitle>
+				<RiArrowLeftWideLine
+					onClick={() => navigate("/")}
+					style={{
+						marginRight: "0px",
+						marginLeft: "0px",
+						fontSize: "2rem",
+						cursor: "pointer",
+						transform: "translateX(-10px)",
+					}}
+				/>
+				{props.entityId}
+			</Styled.PageTitle>
+			<Styled.StatisticsContainer>
 				<Statistic
 					title="Performance"
 					value={props.performance}
@@ -22,15 +38,17 @@ const PageActions = ({
 					value={props.actionPlan}
 					valueRender={(value) => <Title level={5}>{value}</Title>}
 				/>
-			</StatisticsContainer>
-			<Button
-				type="primary"
-				size="large"
-				onClick={() => showPerformanceModificationModal(true)}
-			>
-				Change performance
-			</Button>
-		</FlexContainer>
+			</Styled.StatisticsContainer>
+			<Styled.ButtonContainer>
+				<Button
+					type="primary"
+					size="large"
+					onClick={() => showPerformanceModificationModal(true)}
+				>
+					Change performance
+				</Button>
+			</Styled.ButtonContainer>
+		</Styled.FlexContainer>
 	);
 };
 

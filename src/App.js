@@ -13,6 +13,7 @@ import Tasks from "./pages/tasks/Tasks";
 import PersonalTasks from "./pages/personal-tasks/PersonalTasks";
 import { useDebugMode } from "./hooks/useDebugMode";
 import SplashScreen from "./components/splash-screen/SplashScreen";
+import { FilterProvider } from "./context/FilterContext";
 
 function AnimatedRoutes() {
 	const location = useLocation();
@@ -21,9 +22,11 @@ function AnimatedRoutes() {
 		setShowSplash(false);
 	};
 
+	/*
 	if (showSplash) {
 		return <SplashScreen onDismiss={handleDismissSplash} />;
 	}
+	*/
 
 	return (
 		<AnimatePresence mode="wait">
@@ -43,9 +46,11 @@ function AnimatedRoutes() {
 function App() {
 	useDebugMode();
 	return (
-		<Router>
-			<AnimatedRoutes />
-		</Router>
+		<FilterProvider>
+			<Router>
+				<AnimatedRoutes />
+			</Router>
+		</FilterProvider>
 	);
 }
 

@@ -5,6 +5,7 @@ import tasks from "../../services/task.json";
 import LayoutPage from "../../components/layout/pages/LayoutPage";
 import { Link } from "react-router-dom";
 import SearchMenu from "./components/SearchMenu";
+import { useFilters } from "../../context/FilterContext";
 
 const { Title } = Typography;
 const { Content } = Layout;
@@ -17,6 +18,7 @@ function Home() {
 	const [drawerVisible, setDrawerVisible] = useState(false);
 	const [selectedEntityTasks, setSelectedEntityTasks] = useState([]);
 	const [selectedEntity, setSelectedEntity] = useState(null);
+	const { filters } = useFilters();
 
 	const showTasksDrawer = async (entity) => {
 		setLoading(true);
@@ -38,29 +40,30 @@ function Home() {
 			render: (text, record) => (
 				<Link
 					style={{ color: "#19519f", fontWeight: "600" }}
-					to={`/tasks/${record.entity}?${record.performance.code}?${record.action_plan.label}`}
+					to={`/tasks/${record.id}`}
 				>
-					{text}
+					{record.id}
 				</Link>
 			),
 		},
 		{
 			title: "Performance",
 			dataIndex: "performance",
-			render: (performance) => performance.label,
+			render: (performance) => performance,
 		},
 		{
 			title: "Action Plan",
 			dataIndex: "action_plan",
-			render: (action_plan) => action_plan.label,
+			render: (action_plan) => action_plan,
 		},
 		{
 			title: "Fecha",
 			dataIndex: "date",
 		},
 		{
-			title: "Indicators",
-			dataIndex: "indicators",
+			title: "type",
+			dataIndex: "well_type",
+			render: (well_type) => well_type,
 		},
 		{
 			title: "Tareas",
@@ -88,7 +91,7 @@ function Home() {
 			<span>Tareas Pendientes</span>
 			{selectedEntity && (
 				<Link
-					to={`/tasks/${selectedEntity.entity}?${selectedEntity.performance.code}?${selectedEntity.action_plan.label}`}
+					to={`/tasks/${selectedEntity.entity}?${selectedEntity.performance.code}?${selectedEntity.action_plan}`}
 					style={{ fontSize: "14px" }}
 				>
 					Ver más detalle →
@@ -102,7 +105,7 @@ function Home() {
 			try {
 				const data = await fetch_entities();
 				setEntities(data);
-				setFilteredEntities(data);
+				applyAllFilters(data);
 			} catch (err) {
 				setError("Failed to fetch articles");
 			} finally {
@@ -112,27 +115,53 @@ function Home() {
 		loadEntities();
 	}, []);
 
-	const filterEntities = (filters) => {
-		const { entity, performance, action_plan } = filters;
-		console.log(filters);
+	useEffect(() => {
+		applyAllFilters(entities);
+	}, [filters, entities]);
 
-		setLoading(true); // Start loading
+	const applyAllFilters = (data) => {
+		let filtered = [...data];
 
-		// Simulate a delay between 100ms and 400ms
+		if (filters.wellTypes?.length > 0) {
+			filtered = filtered.filter((item) =>
+				filters.wellTypes.includes(item.well_type)
+			);
+		}
+
+		if (filters.entity) {
+			filtered = filtered.filter((item) =>
+				item.id.toLowerCase().includes(filters.entity.toLowerCase())
+			);
+		}
+
+		if (filters.performance) {
+			filtered = filtered.filter(
+				(item) => item.performance.code === filters.performance
+			);
+		}
+
+		if (filters.action_plan) {
+			filtered = filtered.filter(
+				(item) => item.action_plan === filters.action_plan
+			);
+		}
+
+		if (filters.projects?.length > 0) {
+			filtered = filtered.filter((item) =>
+				filters.projects.includes(item.WF_project)
+			);
+		}
+
+		setFilteredEntities(filtered);
+	};
+
+	const filterEntities = (searchFilters) => {
+		setLoading(true);
 		const delay = Math.floor(Math.random() * (800 - 250 + 1) + 100);
 
 		setTimeout(() => {
-			const filtered = entities.filter((item) => {
-				//prettier-ignore
-				return (
-					(entity? item.entity.toLowerCase().includes(entity.toLowerCase()): true) &&
-					(performance ? item.performance.code === performance : true) &&
-					(action_plan? item.action_plan.code.toLowerCase().includes(action_plan.toLowerCase()): true)
-				);
-			});
-			console.log(filtered);
-			setFilteredEntities(filtered);
-			setLoading(false); // Stop loading after filtering is done
+			applyAllFilters(entities);
+			setLoading(false);
 		}, delay);
 	};
 
@@ -151,7 +180,7 @@ function Home() {
 
 	return (
 		<LayoutPage
-			pageName="Screening"
+			pageName="Buscador"
 			secondaryTitle="Listado de Entidades"
 			type="side-bar-layout"
 			sidebar={<SearchMenu onFilter={filterEntities} />}
@@ -162,9 +191,9 @@ function Home() {
 				columns={columns}
 				dataSource={filteredEntities}
 				size="middle"
-				pagination={{ pageSize: 13 }}
+				pagination={{ pageSize: 15 }}
 				loading={loading}
-				style={{ padding: "1%" }}
+				style={{ padding: "%" }}
 			/>
 
 			<Drawer
