@@ -15,7 +15,7 @@ export async function fetch_entities() {
 	}
 }
 
-export async function fetch_performances() {
+export async function fetch_performance() {
 	try {
 		const response = await axios.get(
 			process.env.REACT_APP_SERVICES + "/performance"
@@ -27,7 +27,7 @@ export async function fetch_performances() {
 	}
 }
 
-export async function fetch_action_plans() {
+export async function fetch_action_plan() {
 	try {
 		const response = await axios.get(
 			process.env.REACT_APP_SERVICES + "/action-plan"

@@ -42,7 +42,7 @@ function Home() {
 					style={{ color: "#19519f", fontWeight: "600" }}
 					to={`/tasks/${record.id}`}
 				>
-					{record.id}
+					{record.code}
 				</Link>
 			),
 		},
@@ -63,7 +63,7 @@ function Home() {
 		{
 			title: "type",
 			dataIndex: "well_type",
-			render: (well_type) => well_type,
+			render: (type) => type,
 		},
 		{
 			title: "Tareas",

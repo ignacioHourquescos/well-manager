@@ -2,21 +2,37 @@ import React, { useEffect, useState } from "react";
 import { Form, Row, Col, Input, Select, Button } from "antd";
 import { Inner } from "./SearchMenu.styles";
 import FormItem from "../../../components/common/FormItem";
-import performance from "../../../services/performance.json";
-import actionPlan from "../../../services/action_plan.json";
-import { useFilters } from "../../../context/FilterContext";
+import {
+	fetch_performance,
+	fetch_action_plan,
+} from "../../../services/general";
 
 const { Option } = Select;
 const SearchMenu = ({ onFilter }) => {
 	const [form] = Form.useForm();
-	const { setFilters } = useFilters();
-
+	const [performanceOptions, setPerformanceOptions] = useState([]);
+	const [actionPlanOptions, setActionPlanOptions] = useState([]);
 	const formValues = Form.useWatch([], form);
-	console.log(performance);
+
+	useEffect(() => {
+		const fetchData = async () => {
+			try {
+				const [performanceData, actionPlanData] = await Promise.all([
+					fetch_performance(),
+					fetch_action_plan(),
+				]);
+				setPerformanceOptions(performanceData);
+				setActionPlanOptions(actionPlanData);
+			} catch (error) {
+				console.error("Error fetching data:", error);
+			}
+		};
+
+		fetchData();
+	}, []);
 
 	const onFinish = (values) => {
 		console.log(values);
-		setFilters(values);
 		onFilter(values);
 	};
 
@@ -45,9 +61,9 @@ const SearchMenu = ({ onFilter }) => {
 							value={formValues?.performance}
 							inputComponent={
 								<Select allowClear>
-									{performance.map((option) => (
+									{performanceOptions.map((option) => (
 										<Option key={option.code} value={option.code}>
-											{option.label}
+											{option.name}
 										</Option>
 									))}
 								</Select>
@@ -65,9 +81,9 @@ const SearchMenu = ({ onFilter }) => {
 							value={formValues?.action_plan}
 							inputComponent={
 								<Select allowClear>
-									{actionPlan.map((option) => (
+									{actionPlanOptions.map((option) => (
 										<Option key={option.code} value={option.code}>
-											{option.label}
+											{option.name}
 										</Option>
 									))}
 								</Select>

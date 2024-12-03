@@ -1,6 +1,6 @@
 import { Typography, Layout, Row, Col, Table, Modal, Tabs } from "antd";
 import React, { useState, useEffect } from "react";
-import { fetch_action_plans } from "../../services/general";
+import { fetch_action_plan } from "../../services/general";
 import LayoutPage from "../../components/layout/pages/LayoutPage";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import AddAction from "./components/add-action/AddAction";
@@ -47,7 +47,7 @@ function Tasks() {
 	useEffect(() => {
 		async function loadActions() {
 			try {
-				const data = await fetch_action_plans();
+				const data = await fetch_action_plan();
 				setTasks(data);
 			} catch (err) {
 				setError("Failed to fetch actions");
