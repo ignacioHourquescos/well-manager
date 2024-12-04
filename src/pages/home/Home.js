@@ -49,7 +49,7 @@ function Home() {
 		{
 			title: "Performance",
 			dataIndex: "performance",
-			render: (performance) => performance,
+			render: (name) => name,
 		},
 		{
 			title: "Action Plan",

@@ -60,13 +60,7 @@ const SearchMenu = ({ onFilter }) => {
 							width="100%"
 							value={formValues?.performance}
 							inputComponent={
-								<Select allowClear>
-									{performanceOptions.map((option) => (
-										<Option key={option.code} value={option.code}>
-											{option.name}
-										</Option>
-									))}
-								</Select>
+								<Select allowClear options={performance_options}></Select>
 							}
 						/>
 					</Col>
@@ -80,13 +74,7 @@ const SearchMenu = ({ onFilter }) => {
 							width="100%"
 							value={formValues?.action_plan}
 							inputComponent={
-								<Select allowClear>
-									{actionPlanOptions.map((option) => (
-										<Option key={option.code} value={option.code}>
-											{option.name}
-										</Option>
-									))}
-								</Select>
+								<Select allowClear options={action_plan_options}></Select>
 							}
 						/>
 					</Col>
@@ -110,3 +98,84 @@ const SearchMenu = ({ onFilter }) => {
 };
 
 export default SearchMenu;
+const performance_options = [
+	{
+		value: "outstanding",
+		label: "Outstanding",
+	},
+	{
+		value: "average",
+		label: "Average",
+	},
+	{
+		value: "recoverable_production",
+		label: "Recoverable Production",
+	},
+	{
+		value: "enhance_production",
+		label: "Enhance Production",
+	},
+	{
+		value: "unrecoverable_production",
+		label: "Unrecoverable Production",
+	},
+];
+
+const action_plan_options = [
+	{
+		value: "adjust_potential",
+		label: "Adjust potential",
+	},
+	{
+		value: "improve_fluid_allocation",
+		label: "Improve Fluid Allocation",
+	},
+	{
+		value: "solve_facilities_constrains",
+		label: "Solve Facilities Constrains",
+	},
+	{
+		value: "inactive_well_shut_in",
+		label: "Inactive Well/Shut in",
+	},
+	{
+		value: "adjust_surface_operational_parameters",
+		label: "Adjust surface operational parameters",
+	},
+	{
+		value: "update_operational_parameters",
+		label: "Update operational parameters",
+	},
+	{
+		value: "normal_monitoring",
+		label: "Normal Monitoring",
+	},
+	{
+		value: "return_to_production_injection",
+		label: "Return to production/injection",
+	},
+	{
+		value: "improve_enhanced_recovery",
+		label: "Improve Enhanced Recovery",
+	},
+	{
+		value: "reduce_lack_of_capacity",
+		label: "Reduce lack of capacity",
+	},
+	{
+		value: "improve_reservoir_performance",
+		label: "Improve reservoir performance",
+	},
+	{
+		value: "adjust_inflow_outflow_performance",
+		label: "Adjust Inflow/Outflow performance",
+	},
+	{
+		value: "further_studies",
+		label: "Further Studies",
+	},
+	{
+		value: "out_of_scan",
+		label: "Out of Scan",
+	},
+];
