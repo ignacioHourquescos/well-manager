@@ -33,8 +33,8 @@ function AnimatedRoutes() {
 			<Routes location={location} key={location.pathname}>
 				<Route element={<LayoutGeneral />}>
 					<Route path="/" element={<Home />} />
-					<Route path="/entity/:entityId" element={<Well />} />
-					<Route path="/tasks/:entityId" element={<Tasks />} />
+					<Route path="/entity/:wellCode/:wellId" element={<Well />} />
+					<Route path="/tasks/:wellCode/:wellId" element={<Tasks />} />
 					<Route path="/my-tasks" element={<PersonalTasks />} />
 					{/* Add other routes as needed */}
 				</Route>

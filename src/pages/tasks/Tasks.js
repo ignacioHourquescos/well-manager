@@ -15,7 +15,7 @@ import { Styled } from "./Tasks.styles";
 const { Title } = Typography;
 
 function Tasks() {
-	const { entityId } = useParams();
+	const { wellId, wellCode } = useParams();
 	const [tasks, setTasks] = useState([]);
 	const [isModalVisible, setIsModalVisible] = useState(false);
 	const [loading, setLoading] = useState(true);
@@ -126,9 +126,9 @@ function Tasks() {
 		}
 	};
 	return (
-		<LayoutPage pageName={`${entityId}`}>
+		<LayoutPage pageName={`${wellCode}`}>
 			<PageActions
-				entityId={entityId}
+				entityId={wellCode}
 				performance={performance}
 				actionPlan={actionPlan}
 				showPerformanceModificationModal={openModal}

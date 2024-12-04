@@ -1,14 +1,15 @@
 import { Typography, Layout, Drawer, Table, List, Tag } from "antd";
 import React, { useState, useEffect } from "react";
-import { fetch_entities } from "../../services/general";
+import {
+	fetch_entities,
+	fetch_performance,
+	fetch_wells,
+} from "../../services/general";
 import tasks from "../../services/task.json";
 import LayoutPage from "../../components/layout/pages/LayoutPage";
 import { Link } from "react-router-dom";
 import SearchMenu from "./components/SearchMenu";
 import { useFilters } from "../../context/FilterContext";
-
-const { Title } = Typography;
-const { Content } = Layout;
 
 function Home() {
 	const [entities, setEntities] = useState([]);
@@ -33,14 +34,30 @@ function Home() {
 		}
 	};
 
+	useEffect(() => {
+		async function loadEntities() {
+			try {
+				const entities = await fetch_wells();
+				console.log("Entity lists", entities);
+				setEntities(entities);
+				applyAllFilters(entities);
+			} catch (err) {
+				setError("Failed to fetch articles");
+			} finally {
+				setLoading(false);
+			}
+		}
+		loadEntities();
+	}, []);
+
 	const columns = [
 		{
-			title: "Entidad",
+			title: "Well",
 			dataIndex: "entity",
 			render: (text, record) => (
 				<Link
 					style={{ color: "#19519f", fontWeight: "600" }}
-					to={`/tasks/${record.id}`}
+					to={`/tasks/${record.code}/${record.id_well}`}
 				>
 					{record.code}
 				</Link>
@@ -49,7 +66,7 @@ function Home() {
 		{
 			title: "Performance",
 			dataIndex: "performance",
-			render: (name) => name,
+			render: (performance) => performance,
 		},
 		{
 			title: "Action Plan",
@@ -58,25 +75,32 @@ function Home() {
 		},
 		{
 			title: "Fecha",
-			dataIndex: "date",
+			dataIndex: "created_at",
+			render: (created_at) => {
+				const date = new Date(created_at);
+				return date
+					.toLocaleString("en-GB", {
+						day: "2-digit",
+						month: "2-digit",
+						year: "numeric",
+						hour: "2-digit",
+						minute: "2-digit",
+					})
+					.replace(",", "");
+			},
 		},
-		{
-			title: "type",
-			dataIndex: "well_type",
-			render: (type) => type,
-		},
-		{
-			title: "Tareas",
-			dataIndex: "actions",
-			render: (text, record) => (
-				<a
-					style={{ color: "#19519f", fontWeight: "600" }}
-					onClick={() => showTasksDrawer(record)}
-				>
-					Tareas
-				</a>
-			),
-		},
+		//{
+		//	title: "Tareas",
+		//	dataIndex: "actions",
+		//	render: (text, record) => (
+		//		<a
+		//			style={{ color: "#19519f", fontWeight: "600" }}
+		//			onClick={() => showTasksDrawer(record)}
+		//		>
+		//			Tareas
+		//		</a>
+		//	),
+		//},
 	];
 
 	const drawerTitle = (
@@ -99,21 +123,6 @@ function Home() {
 			)}
 		</div>
 	);
-
-	useEffect(() => {
-		async function loadEntities() {
-			try {
-				const data = await fetch_entities();
-				setEntities(data);
-				applyAllFilters(data);
-			} catch (err) {
-				setError("Failed to fetch articles");
-			} finally {
-				setLoading(false);
-			}
-		}
-		loadEntities();
-	}, []);
 
 	useEffect(() => {
 		applyAllFilters(entities);
@@ -160,7 +169,24 @@ function Home() {
 		const delay = Math.floor(Math.random() * (800 - 250 + 1) + 100);
 
 		setTimeout(() => {
-			applyAllFilters(entities);
+			// Filter the entities based on searchFilters
+			const filteredResults = entities.filter((entity) => {
+				// Return true if entity matches all search criteria
+				return Object.entries(searchFilters).every(([key, value]) => {
+					// Skip empty filters
+					if (!value || value === "") return true;
+
+					// Handle different types of filters
+					if (typeof entity[key] === "string") {
+						return entity[key].toLowerCase().includes(value.toLowerCase());
+					}
+					// For exact matches (numbers, etc)
+					return entity[key] === value;
+				});
+			});
+
+			// Update the filtered results
+			applyAllFilters(filteredResults);
 			setLoading(false);
 		}, delay);
 	};

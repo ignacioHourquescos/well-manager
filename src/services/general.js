@@ -1,6 +1,4 @@
 import axios from "axios";
-import entity from "./entity.json";
-import task from "./task.json";
 
 export async function fetch_entities() {
 	//return entity;
@@ -15,11 +13,20 @@ export async function fetch_entities() {
 	}
 }
 
+export async function fetch_wells() {
+	//return entity;
+	try {
+		const response = await axios.get(process.env.REACT_APP_SERVICES + "/wells");
+		return response.data;
+	} catch (error) {
+		console.error("Error fetching entities:", error);
+		throw error;
+	}
+}
+
 export async function fetch_performance() {
 	try {
-		const response = await axios.get(
-			process.env.REACT_APP_SERVICES + "/performance"
-		);
+		const response = await axios.get(process.env.REACT_APP_SERVICES + "/wells");
 		return response.data;
 	} catch (error) {
 		console.error("Error fetching performance data:", error);

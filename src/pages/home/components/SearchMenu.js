@@ -44,9 +44,9 @@ const SearchMenu = ({ onFilter }) => {
 					<Col span={24}>
 						<FormItem
 							label="Entidad"
-							name="entity"
+							name="code"
 							width="100%"
-							value={formValues?.entity}
+							value={formValues?.code}
 							inputComponent={<Input />}
 						/>
 					</Col>
@@ -108,74 +108,74 @@ const performance_options = [
 		label: "Average",
 	},
 	{
-		value: "recoverable_production",
+		value: "recoverable production",
 		label: "Recoverable Production",
 	},
 	{
-		value: "enhance_production",
+		value: "enhance production",
 		label: "Enhance Production",
 	},
 	{
-		value: "unrecoverable_production",
+		value: "unrecoverable production",
 		label: "Unrecoverable Production",
 	},
 ];
 
 const action_plan_options = [
 	{
-		value: "adjust_potential",
+		value: "adjust potential",
 		label: "Adjust potential",
 	},
 	{
-		value: "improve_fluid_allocation",
+		value: "improve fluid allocation",
 		label: "Improve Fluid Allocation",
 	},
 	{
-		value: "solve_facilities_constrains",
+		value: "solve facilities constrains",
 		label: "Solve Facilities Constrains",
 	},
 	{
-		value: "inactive_well_shut_in",
+		value: "inactive well shut in",
 		label: "Inactive Well/Shut in",
 	},
 	{
-		value: "adjust_surface_operational_parameters",
+		value: "adjust surface operational parameters",
 		label: "Adjust surface operational parameters",
 	},
 	{
-		value: "update_operational_parameters",
+		value: "update operational parameters",
 		label: "Update operational parameters",
 	},
 	{
-		value: "normal_monitoring",
+		value: "normal monitoring",
 		label: "Normal Monitoring",
 	},
 	{
-		value: "return_to_production_injection",
+		value: "return to production injection",
 		label: "Return to production/injection",
 	},
 	{
-		value: "improve_enhanced_recovery",
+		value: "improve enhanced recovery",
 		label: "Improve Enhanced Recovery",
 	},
 	{
-		value: "reduce_lack_of_capacity",
+		value: "reduce lack of capacity",
 		label: "Reduce lack of capacity",
 	},
 	{
-		value: "improve_reservoir_performance",
+		value: "improve reservoir performance",
 		label: "Improve reservoir performance",
 	},
 	{
-		value: "adjust_inflow_outflow_performance",
+		value: "adjust inflow outflow performance",
 		label: "Adjust Inflow/Outflow performance",
 	},
 	{
-		value: "further_studies",
+		value: "further studies",
 		label: "Further Studies",
 	},
 	{
-		value: "out_of_scan",
+		value: "out of scan",
 		label: "Out of Scan",
 	},
 ];
