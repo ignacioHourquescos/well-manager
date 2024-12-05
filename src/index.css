@@ -26,10 +26,12 @@ code {
 
 
 /*ANT TABLE STYLING*/
+/*ANT TABLE HEADER*/
 .ant-table-tbody{background-color: white !important;}
 .ant-table-thead > tr > th {
   padding: 6px 2px 4px 4px !important;
   background-color: #f0eff4 !important;
+  padding-left:0.5rem !important;
 }
 
 .ant-table-tbody > tr > td {

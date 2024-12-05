@@ -14,6 +14,8 @@ const SearchMenu = ({ onFilter }) => {
 	const [actionPlanOptions, setActionPlanOptions] = useState([]);
 	const formValues = Form.useWatch([], form);
 
+	console.log("PERFORMANCE");
+
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
@@ -21,8 +23,18 @@ const SearchMenu = ({ onFilter }) => {
 					fetch_performance(),
 					fetch_action_plan(),
 				]);
-				setPerformanceOptions(performanceData);
-				setActionPlanOptions(actionPlanData);
+				// Transform the performance data to match Select's expected format
+				const formattedPerformanceOptions = performanceData.map((item) => ({
+					value: item.code.toLowerCase(),
+					label: item.name,
+				}));
+				const formattedActionPlanOptions = actionPlanData.map((item) => ({
+					...item,
+					value: item.name, // Use name instead of code as value
+					label: item.name,
+				}));
+				setPerformanceOptions(formattedPerformanceOptions);
+				setActionPlanOptions(formattedActionPlanOptions);
 			} catch (error) {
 				console.error("Error fetching data:", error);
 			}
@@ -60,7 +72,7 @@ const SearchMenu = ({ onFilter }) => {
 							width="100%"
 							value={formValues?.performance}
 							inputComponent={
-								<Select allowClear options={performance_options}></Select>
+								<Select allowClear options={performanceOptions}></Select>
 							}
 						/>
 					</Col>
@@ -74,7 +86,7 @@ const SearchMenu = ({ onFilter }) => {
 							width="100%"
 							value={formValues?.action_plan}
 							inputComponent={
-								<Select allowClear options={action_plan_options}></Select>
+								<Select allowClear options={actionPlanOptions}></Select>
 							}
 						/>
 					</Col>

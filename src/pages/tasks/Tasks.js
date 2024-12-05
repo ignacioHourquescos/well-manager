@@ -1,31 +1,28 @@
-import { Typography, Layout, Row, Col, Table, Modal, Tabs } from "antd";
+import { Typography, Layout, Row, Col, message, Tabs } from "antd";
 import React, { useState, useEffect } from "react";
-import { fetch_action_plan } from "../../services/general";
+import { useParams } from "react-router-dom";
 import LayoutPage from "../../components/layout/pages/LayoutPage";
-import { useParams, useLocation, useNavigate } from "react-router-dom";
 import AddAction from "./components/add-action/AddAction";
 import PageActions from "./components/page-actions/PageActions";
-import { motion } from "framer-motion";
-
 import TasksTable from "./components/table/TaskTable";
 import History from "./components/history/History";
-import { RiArrowLeftWideLine } from "react-icons/ri";
-import { Styled } from "./Tasks.styles";
-
-const { Title } = Typography;
+import ChangePerformanceModal from "./components/change-performance-modal/ChangePerformanceModal";
+import {
+	fetch_tasks,
+	fetch_action_plan,
+	update_well_performance,
+} from "../../services/general";
 
 function Tasks() {
 	const { wellId, wellCode } = useParams();
 	const [tasks, setTasks] = useState([]);
 	const [isModalVisible, setIsModalVisible] = useState(false);
 	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState(null);
 	const [performance, setPerformance] = useState("");
-	const location = useLocation();
 	const [actionPlan, setActionPlan] = useState("");
 	const [selectedTask, setSelectedTask] = useState(null);
 	const [activeTab, setActiveTab] = useState("1");
-	const navigate = useNavigate();
+	const [error, setError] = useState(null);
 
 	const handleTabChange = (key) => {
 		setActiveTab(key);
@@ -35,47 +32,29 @@ function Tasks() {
 		setIsModalVisible(true);
 	};
 
-	const handleOk = () => {
-		setIsModalVisible(false);
-		// Add logic to update performance or action plan
+	const handleStatusUpdate = async (values) => {
+		try {
+			await update_well_performance(
+				parseInt(wellId),
+				parseInt(values.performance),
+				parseInt(values.action_plan)
+			);
+
+			setPerformance(values.performance);
+			setActionPlan(values.action_plan);
+			setIsModalVisible(false);
+			message.success("Well status updated successfully");
+		} catch (error) {
+			console.error("Failed to update well status:", error);
+			message.error("Failed to update well status");
+		}
 	};
 
-	const handleCancel = () => {
-		setIsModalVisible(false);
-	};
-
-	useEffect(() => {
-		async function loadActions() {
-			try {
-				const data = await fetch_action_plan();
-				setTasks(data);
-			} catch (err) {
-				setError("Failed to fetch actions");
-			} finally {
-				setLoading(false);
-			}
-		}
-		loadActions();
-	}, []);
-
-	useEffect(() => {
-		const queryString = location.search;
-		const queryWithoutQuestionMark = queryString.substring(1);
-		const queryParts = queryWithoutQuestionMark.split("?");
-
-		// Set the first part to performance
-		if (queryParts.length > 0) {
-			setPerformance(queryParts[0]);
-		}
-
-		// The second part (if exists) is the issue
-		if (queryParts.length > 1) {
-			setActionPlan(decodeURIComponent(queryParts[1]));
-		}
-	}, [location]);
-
-	const handleViewClick = (id) => {
-		setSelectedTask(id);
+	const handleViewClick = (taskId) => {
+		const selectedTaskData = tasks.find(
+			(task) => task.id_action_plan === taskId
+		);
+		setSelectedTask(selectedTaskData);
 	};
 
 	const items = [
@@ -125,6 +104,21 @@ function Tasks() {
 				return null;
 		}
 	};
+
+	useEffect(() => {
+		async function loadActions() {
+			try {
+				const data = await fetch_action_plan();
+				setTasks(data);
+			} catch (err) {
+				setError("Failed to fetch actions");
+			} finally {
+				setLoading(false);
+			}
+		}
+		loadActions();
+	}, []);
+
 	return (
 		<LayoutPage pageName={`${wellCode}`}>
 			<PageActions
@@ -143,17 +137,13 @@ function Tasks() {
 
 			{renderTabContent()}
 
-			<Modal
-				title="Change Performance"
+			<ChangePerformanceModal
 				visible={isModalVisible}
-				onOk={handleOk}
-				onCancel={handleCancel}
-			>
-				<p>
-					FORMUALRIO PARA CAMBIAR DE PERFORMANCE Y ACTION PLAN CON TODAS LAS
-					VALIDACIONES NECESARIOS A DEFINIR
-				</p>
-			</Modal>
+				onCancel={() => setIsModalVisible(false)}
+				onOk={handleStatusUpdate}
+				initialPerformance={performance}
+				initialActionPlan={actionPlan}
+			/>
 		</LayoutPage>
 	);
 }

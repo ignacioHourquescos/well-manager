@@ -1,6 +1,6 @@
 import { Typography, Layout, Table } from "antd";
 import React, { useState, useEffect } from "react";
-import { fetch_entities } from "../../services/general";
+import { fetch_wells } from "../../services/general";
 import LayoutPage from "../../components/layout/pages/LayoutPage";
 import { Link } from "react-router-dom";
 
@@ -53,7 +53,7 @@ function Home() {
 	useEffect(() => {
 		async function loadEntities() {
 			try {
-				const data = await fetch_entities();
+				const data = await fetch_wells();
 				setEntities(data);
 				setFilteredEntities(data);
 			} catch (err) {

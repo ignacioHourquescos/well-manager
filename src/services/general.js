@@ -1,18 +1,5 @@
 import axios from "axios";
 
-export async function fetch_entities() {
-	//return entity;
-	try {
-		const response = await axios.get(
-			process.env.REACT_APP_SERVICES + "/entity"
-		);
-		return response.data;
-	} catch (error) {
-		console.error("Error fetching entities:", error);
-		throw error;
-	}
-}
-
 export async function fetch_wells() {
 	//return entity;
 	try {
@@ -26,7 +13,9 @@ export async function fetch_wells() {
 
 export async function fetch_performance() {
 	try {
-		const response = await axios.get(process.env.REACT_APP_SERVICES + "/wells");
+		const response = await axios.get(
+			process.env.REACT_APP_SERVICES + "/performances"
+		);
 		return response.data;
 	} catch (error) {
 		console.error("Error fetching performance data:", error);
@@ -37,7 +26,7 @@ export async function fetch_performance() {
 export async function fetch_action_plan() {
 	try {
 		const response = await axios.get(
-			process.env.REACT_APP_SERVICES + "/action-plan"
+			process.env.REACT_APP_SERVICES + "/action-plans"
 		);
 		return response.data;
 	} catch (error) {
@@ -45,3 +34,19 @@ export async function fetch_action_plan() {
 		throw error;
 	}
 }
+
+export const update_well_performance = async (
+	wellId,
+	performanceId,
+	actionPlanId
+) => {
+	const response = await axios.put(
+		process.env.REACT_APP_SERVICES + `/well/performance`,
+		{
+			wellId,
+			performanceId,
+			actionPlanId,
+		}
+	);
+	return response.data;
+};
