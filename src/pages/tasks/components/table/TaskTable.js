@@ -6,7 +6,7 @@ const { Title } = Typography;
 
 function TasksTable({ tasks, loading, handleViewClick }) {
 	const columns = [
-		{ title: "Task", dataIndex: "task", key: "task", width: "70%" },
+		{ title: "Task", dataIndex: "task_name", key: "task", width: "70%" },
 		{
 			title: "Status",
 			dataIndex: "status",

@@ -50,3 +50,10 @@ export const update_well_performance = async (
 	);
 	return response.data;
 };
+
+export const fetch_work_order_tasks = async (workOrderId) => {
+	const response = await axios.get(
+		process.env.REACT_APP_SERVICES + `/work-order-tasks/${workOrderId}`
+	);
+	return response.data;
+};

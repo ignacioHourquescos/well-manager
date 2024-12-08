@@ -7,14 +7,17 @@ import PageActions from "./components/page-actions/PageActions";
 import TasksTable from "./components/table/TaskTable";
 import History from "./components/history/History";
 import ChangePerformanceModal from "./components/change-performance-modal/ChangePerformanceModal";
+
 import {
 	fetch_tasks,
 	fetch_action_plan,
 	update_well_performance,
+	fetch_work_order_tasks,
 } from "../../services/general";
+import AddTaskModal from "./components/page-actions/components/add-task-modal/AddTaskModal";
 
 function Tasks() {
-	const { wellId, wellCode } = useParams();
+	const { wellId, wellCode, workOrderId } = useParams();
 	const [tasks, setTasks] = useState([]);
 	const [isModalVisible, setIsModalVisible] = useState(false);
 	const [loading, setLoading] = useState(true);
@@ -23,6 +26,7 @@ function Tasks() {
 	const [selectedTask, setSelectedTask] = useState(null);
 	const [activeTab, setActiveTab] = useState("1");
 	const [error, setError] = useState(null);
+	const [isAddTaskModalVisible, setIsAddTaskModalVisible] = useState(false);
 
 	const handleTabChange = (key) => {
 		setActiveTab(key);
@@ -51,11 +55,28 @@ function Tasks() {
 	};
 
 	const handleViewClick = (taskId) => {
-		const selectedTaskData = tasks.find(
-			(task) => task.id_action_plan === taskId
-		);
+		const selectedTaskData = tasks.find((task) => task.task_id === taskId);
 		setSelectedTask(selectedTaskData);
 	};
+	useEffect(() => {
+		async function loadWorkOrderTasks() {
+			try {
+				setLoading(true);
+				const data = await fetch_work_order_tasks(workOrderId);
+				setTasks(data);
+			} catch (err) {
+				console.error("Error fetching work order tasks:", err);
+				setError("Failed to fetch work order tasks");
+				message.error("Failed to load tasks");
+			} finally {
+				setLoading(false);
+			}
+		}
+
+		if (workOrderId) {
+			loadWorkOrderTasks();
+		}
+	}, [workOrderId]);
 
 	const items = [
 		{
@@ -81,7 +102,7 @@ function Tasks() {
 					<Row gutter={24}>
 						<Col span={12}>
 							<TasksTable
-								tasks={performance === "Optimal" ? null : tasks}
+								tasks={tasks}
 								loading={loading}
 								handleViewClick={handleViewClick}
 							/>
@@ -105,19 +126,27 @@ function Tasks() {
 		}
 	};
 
-	useEffect(() => {
-		async function loadActions() {
-			try {
-				const data = await fetch_action_plan();
-				setTasks(data);
-			} catch (err) {
-				setError("Failed to fetch actions");
-			} finally {
-				setLoading(false);
-			}
+	const handleAddTask = async (values) => {
+		try {
+			const payload = {
+				id_work_order: parseInt(workOrderId),
+				task_id: parseInt(values.task_id),
+				responsable: values.responsable,
+				priority: values.priority,
+				status: values.status,
+				start_date: values.start_date.toISOString(),
+				due_date: values.due_date.toISOString(),
+				additional_comments: values.additional_comments,
+			};
+
+			// ... your API call code ...
+			setIsAddTaskModalVisible(false);
+			message.success("Task added successfully");
+		} catch (error) {
+			console.error("Error adding task:", error);
+			message.error("Failed to add task");
 		}
-		loadActions();
-	}, []);
+	};
 
 	return (
 		<LayoutPage pageName={`${wellCode}`}>
@@ -126,6 +155,7 @@ function Tasks() {
 				performance={performance}
 				actionPlan={actionPlan}
 				showPerformanceModificationModal={openModal}
+				showAddTaskModal={setIsAddTaskModalVisible}
 			/>
 
 			<Tabs
@@ -143,6 +173,11 @@ function Tasks() {
 				onOk={handleStatusUpdate}
 				initialPerformance={performance}
 				initialActionPlan={actionPlan}
+			/>
+			<AddTaskModal
+				visible={isAddTaskModalVisible}
+				onCancel={() => setIsAddTaskModalVisible(false)}
+				onOk={handleAddTask}
 			/>
 		</LayoutPage>
 	);

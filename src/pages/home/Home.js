@@ -57,7 +57,7 @@ function Home() {
 			render: (text, record) => (
 				<Link
 					style={{ color: "#19519f", fontWeight: "600" }}
-					to={`/tasks/${record.code}/${record.id_well}`}
+					to={`/tasks/${record.code}/${record.id_well}/${record.id_work_order}`}
 				>
 					{record.code}
 				</Link>

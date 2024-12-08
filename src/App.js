@@ -22,11 +22,9 @@ function AnimatedRoutes() {
 		setShowSplash(false);
 	};
 
-	/*
 	if (showSplash) {
 		return <SplashScreen onDismiss={handleDismissSplash} />;
 	}
-	*/
 
 	return (
 		<AnimatePresence mode="wait">
@@ -34,9 +32,11 @@ function AnimatedRoutes() {
 				<Route element={<LayoutGeneral />}>
 					<Route path="/" element={<Home />} />
 					<Route path="/entity/:wellCode/:wellId" element={<Well />} />
-					<Route path="/tasks/:wellCode/:wellId" element={<Tasks />} />
+					<Route
+						path="/tasks/:wellCode/:wellId/:workOrderId"
+						element={<Tasks />}
+					/>
 					<Route path="/my-tasks" element={<PersonalTasks />} />
-					{/* Add other routes as needed */}
 				</Route>
 			</Routes>
 		</AnimatePresence>
