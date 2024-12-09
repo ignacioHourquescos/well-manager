@@ -12,7 +12,10 @@ import {
 } from "antd";
 import { useParams } from "react-router-dom";
 import FormItem from "../../../../../../components/common/FormItem";
-import { fetch_task_descriptions_by_action_plan } from "../../../../../../services/general";
+import {
+	fetch_task_descriptions_by_action_plan,
+	create_work_order_task,
+} from "../../../../../../services/general";
 
 const { TextArea } = Input;
 
@@ -74,22 +77,7 @@ const AddTaskModal = ({ open, onClose, onSuccess }) => {
 				additional_comments: values.additional_comments,
 			};
 
-			const response = await fetch(
-				process.env.REACT_APP_API_URL + "/work-order-task",
-				{
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify(taskData),
-				}
-			);
-
-			const data = await response.json();
-
-			if (!response.ok) {
-				throw new Error(data.error || "Failed to create task");
-			}
+			await create_work_order_task(taskData);
 
 			message.success("Task created successfully");
 			form.resetFields();

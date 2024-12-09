@@ -69,3 +69,16 @@ export const fetch_task_descriptions_by_action_plan = async (actionPlanId) => {
 		throw error;
 	}
 };
+
+export const create_work_order_task = async (taskData) => {
+	try {
+		const response = await axios.post(
+			process.env.REACT_APP_SERVICES + "/work-order-task",
+			taskData
+		);
+		return response.data;
+	} catch (error) {
+		console.error("Error creating work order task:", error);
+		throw error;
+	}
+};
