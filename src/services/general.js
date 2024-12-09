@@ -57,3 +57,15 @@ export const fetch_work_order_tasks = async (workOrderId) => {
 	);
 	return response.data;
 };
+
+export const fetch_task_descriptions_by_action_plan = async (actionPlanId) => {
+	try {
+		const response = await axios.get(
+			process.env.REACT_APP_SERVICES + `/task-descriptions/${actionPlanId}`
+		);
+		return response.data;
+	} catch (error) {
+		console.error("Error fetching task descriptions:", error);
+		throw error;
+	}
+};

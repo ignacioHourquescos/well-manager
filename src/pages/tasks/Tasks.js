@@ -148,6 +148,24 @@ function Tasks() {
 		}
 	};
 
+	const fetchTasks = async () => {
+		try {
+			setLoading(true);
+			const data = await fetch_work_order_tasks(workOrderId);
+			setTasks(data);
+		} catch (err) {
+			console.error("Error fetching work order tasks:", err);
+			setError("Failed to fetch work order tasks");
+			message.error("Failed to load tasks");
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	const handleTaskCreated = () => {
+		fetchTasks();
+	};
+
 	return (
 		<LayoutPage pageName={`${wellCode}`}>
 			<PageActions
@@ -175,9 +193,9 @@ function Tasks() {
 				initialActionPlan={actionPlan}
 			/>
 			<AddTaskModal
-				visible={isAddTaskModalVisible}
-				onCancel={() => setIsAddTaskModalVisible(false)}
-				onOk={handleAddTask}
+				open={isAddTaskModalVisible}
+				onClose={() => setIsAddTaskModalVisible(false)}
+				onSuccess={handleTaskCreated}
 			/>
 		</LayoutPage>
 	);

@@ -1,11 +1,62 @@
-import React, { useState } from "react";
-import { Modal, Form, Input, DatePicker, Select, Space, message } from "antd";
+import React, { useState, useMemo, useEffect } from "react";
+import {
+	Modal,
+	Form,
+	Input,
+	DatePicker,
+	Select,
+	Button,
+	message,
+	Row,
+	Col,
+} from "antd";
+import { useParams } from "react-router-dom";
+import FormItem from "../../../../../../components/common/FormItem";
+import { fetch_task_descriptions_by_action_plan } from "../../../../../../services/general";
 
 const { TextArea } = Input;
 
 const AddTaskModal = ({ open, onClose, onSuccess }) => {
 	const [form] = Form.useForm();
 	const [loading, setLoading] = useState(false);
+	const { workOrderId } = useParams();
+	const formValues = Form.useWatch([], form);
+	const [taskOptions, setTaskOptions] = useState([]);
+
+	// Add this useEffect to fetch task descriptions when modal opens
+	useEffect(() => {
+		const fetchTaskDescriptions = async () => {
+			try {
+				const data = await fetch_task_descriptions_by_action_plan(2);
+
+				// Transform the data into options format for Select
+				const options = data.map((task) => ({
+					value: task.task_id,
+					label: `${task.task_id} - ${task.task_description}`,
+				}));
+
+				setTaskOptions(options);
+			} catch (error) {
+				console.error("Error fetching task descriptions:", error);
+				message.error("Failed to load task descriptions");
+			}
+		};
+
+		if (open) {
+			fetchTaskDescriptions();
+		}
+	}, [open]);
+
+	// Calculate rows for TextArea
+	const calculateRows = useMemo(() => {
+		if (!formValues?.additional_comments) return 1;
+		const lineBreaks = (formValues.additional_comments.match(/\n/g) || [])
+			.length;
+		const estimatedRows = Math.ceil(
+			(formValues.additional_comments.length + lineBreaks) / 50
+		);
+		return Math.min(Math.max(estimatedRows, 1), 4);
+	}, [formValues?.additional_comments]);
 
 	const handleSubmit = async () => {
 		try {
@@ -13,7 +64,7 @@ const AddTaskModal = ({ open, onClose, onSuccess }) => {
 			const values = await form.validateFields();
 
 			const taskData = {
-				id_work_order: values.id_work_order,
+				id_work_order: workOrderId,
 				task_id: values.task_id,
 				responsable: values.responsable,
 				priority: values.priority,
@@ -54,73 +105,137 @@ const AddTaskModal = ({ open, onClose, onSuccess }) => {
 			title="Add New Task"
 			open={open}
 			onCancel={onClose}
-			onOk={handleSubmit}
-			okText="Add Task"
-			confirmLoading={loading}
+			footer={[
+				<Button key="cancel" onClick={onClose}>
+					Cancel
+				</Button>,
+				<Button
+					key="submit"
+					type="primary"
+					loading={loading}
+					onClick={handleSubmit}
+				>
+					Add Task
+				</Button>,
+			]}
 		>
 			<Form form={form} layout="vertical" name="addTaskForm">
-				<Form.Item
-					name="id_work_order"
-					label="Work Order ID"
-					rules={[
-						{ required: true, message: "Please input the work order ID!" },
-					]}
-				>
-					<Input type="number" placeholder="Enter work order ID" />
-				</Form.Item>
+				<Row>
+					<Col span={24}>
+						<FormItem
+							label="Task"
+							name="task_id"
+							rules={[{ required: true, message: "Please select a task!" }]}
+							value={formValues?.task_id}
+							inputComponent={
+								<Select options={taskOptions} loading={!taskOptions.length} />
+							}
+						/>
+					</Col>
+				</Row>
 
-				<Form.Item
-					name="task_id"
-					label="Task ID"
-					rules={[{ required: true, message: "Please input the task ID!" }]}
-				>
-					<Input type="number" placeholder="Enter task ID" />
-				</Form.Item>
+				<Row gutter={16}>
+					<Col span={12}>
+						<FormItem
+							label="Responsible"
+							name="responsable"
+							rules={[
+								{
+									required: true,
+									message: "Please input the responsible person!",
+								},
+								{ max: 50, message: "Maximum 50 characters" },
+							]}
+							value={formValues?.responsable}
+							inputComponent={<Input />}
+						/>
+					</Col>
 
-				<Form.Item
-					name="responsable"
-					label="Responsible"
-					rules={[
-						{ required: true, message: "Please input the responsible person!" },
-					]}
-				>
-					<Input placeholder="Enter responsible person" />
-				</Form.Item>
+					<Col span={12}>
+						<FormItem
+							label="Priority"
+							name="priority"
+							rules={[
+								{ required: true, message: "Please select the priority!" },
+							]}
+							value={formValues?.priority}
+							inputComponent={<Select options={priority_options} />}
+						/>
+					</Col>
+				</Row>
 
-				<Form.Item
-					name="priority"
-					label="Priority"
-					rules={[{ required: true, message: "Please select the priority!" }]}
-				>
-					<Select placeholder="Select priority">
-						<Select.Option value="BAJA">Low</Select.Option>
-						<Select.Option value="MEDIA">Medium</Select.Option>
-						<Select.Option value="ALTA">High</Select.Option>
-					</Select>
-				</Form.Item>
+				<Row gutter={16}>
+					<Col span={12}>
+						<FormItem
+							label="Start Date"
+							name="start_date"
+							rules={[
+								{ required: true, message: "Please select the start date!" },
+							]}
+							value={formValues?.start_date}
+							inputComponent={
+								<DatePicker
+									format="DD/MM/YYYY"
+									style={{ width: "100%" }}
+									placeholder=""
+								/>
+							}
+						/>
+					</Col>
 
-				<Form.Item
-					name="start_date"
-					label="Start Date"
-					rules={[{ required: true, message: "Please select the start date!" }]}
-				>
-					<DatePicker showTime style={{ width: "100%" }} />
-				</Form.Item>
+					<Col span={12}>
+						<FormItem
+							label="Due Date"
+							name="due_date"
+							rules={[
+								{ required: true, message: "Please select the due date!" },
+							]}
+							value={formValues?.due_date}
+							inputComponent={
+								<DatePicker
+									format="DD/MM/YYYY"
+									style={{ width: "100%" }}
+									placeholder=""
+								/>
+							}
+						/>
+					</Col>
+				</Row>
 
-				<Form.Item
-					name="due_date"
-					label="Due Date"
-					rules={[{ required: true, message: "Please select the due date!" }]}
-				>
-					<DatePicker showTime style={{ width: "100%" }} />
-				</Form.Item>
-
-				<Form.Item name="additional_comments" label="Additional Comments">
-					<TextArea rows={4} placeholder="Enter additional comments" />
-				</Form.Item>
+				<Row>
+					<Col span={24}>
+						<FormItem
+							label="Additional Comments"
+							name="additional_comments"
+							value={formValues?.additional_comments}
+							rules={[{ max: 500, message: "Maximum 500 characters" }]}
+							inputComponent={
+								<TextArea
+									rows={calculateRows}
+									autoSize={{ minRows: 1, maxRows: 4 }}
+								/>
+							}
+						/>
+					</Col>
+				</Row>
 			</Form>
 		</Modal>
 	);
 };
 
 export default AddTaskModal;
+
+const priority_options = [
+	{
+		value: "ALTA",
+		label: "High",
+	},
+	{
+		value: "MEDIA",
+		label: "Medium",
+	},
+	{
+		value: "BAJA",
+		label: "Low",
+	},
+];
