@@ -74,13 +74,16 @@ const AddTaskModal = ({ open, onClose, onSuccess }) => {
 				additional_comments: values.additional_comments,
 			};
 
-			const response = await fetch("http://localhost:4000/work-order-task", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(taskData),
-			});
+			const response = await fetch(
+				process.env.REACT_APP_API_URL + "/work-order-task",
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify(taskData),
+				}
+			);
 
 			const data = await response.json();
 
