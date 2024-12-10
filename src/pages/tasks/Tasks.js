@@ -1,39 +1,45 @@
-import { Typography, Layout, Row, Col, message, Tabs } from "antd";
+import { Row, Col, message, Tabs } from "antd";
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import LayoutPage from "../../components/layout/pages/LayoutPage";
-import AddAction from "./components/add-action/AddAction";
 import PageActions from "./components/page-actions/PageActions";
-import TasksTable from "./components/table/TaskTable";
-import History from "./components/history/History";
 import ChangePerformanceModal from "./components/change-performance-modal/ChangePerformanceModal";
 
 import {
-	fetch_tasks,
-	fetch_action_plan,
 	update_well_performance,
 	fetch_work_order_tasks,
+	create_work_order_task,
 } from "../../services/general";
-import AddTaskModal from "./components/page-actions/components/add-task-modal/AddTaskModal";
+import TaskTab from "./components/task-tab/TaskTab";
 
 function Tasks() {
 	const { wellId, wellCode, workOrderId } = useParams();
-	const [tasks, setTasks] = useState([]);
-	const [isModalVisible, setIsModalVisible] = useState(false);
-	const [loading, setLoading] = useState(true);
-	const [performance, setPerformance] = useState("");
-	const [actionPlan, setActionPlan] = useState("");
-	const [selectedTask, setSelectedTask] = useState(null);
+	const navigate = useNavigate();
+
+	const [modalStates, setModalStates] = useState({
+		isModalVisible: false,
+		isAddTaskModalVisible: false,
+	});
+
+	const [taskData, setTaskData] = useState({
+		tasks: [],
+		selectedTask: null,
+		loading: true,
+		error: null,
+	});
+
+	const [wellState, setWellState] = useState({
+		performance: "",
+		actionPlan: "",
+	});
+
 	const [activeTab, setActiveTab] = useState("1");
-	const [error, setError] = useState(null);
-	const [isAddTaskModalVisible, setIsAddTaskModalVisible] = useState(false);
 
-	const handleTabChange = (key) => {
-		setActiveTab(key);
-	};
-
-	const openModal = () => {
-		setIsModalVisible(true);
+	const handleModalVisibility = (modalType, isVisible) => {
+		setModalStates((prev) => ({
+			...prev,
+			[modalType]: isVisible,
+		}));
 	};
 
 	const handleStatusUpdate = async (values) => {
@@ -44,37 +50,77 @@ function Tasks() {
 				parseInt(values.action_plan)
 			);
 
-			setPerformance(values.performance);
-			setActionPlan(values.action_plan);
-			setIsModalVisible(false);
+			setWellState({
+				performance: values.performance,
+				actionPlan: values.action_plan,
+			});
+
+			handleModalVisibility("isModalVisible", false);
 			message.success("Well status updated successfully");
+			navigate("/");
 		} catch (error) {
 			console.error("Failed to update well status:", error);
 			message.error("Failed to update well status");
 		}
 	};
 
-	const handleViewClick = (taskId) => {
-		const selectedTaskData = tasks.find((task) => task.task_id === taskId);
-		setSelectedTask(selectedTaskData);
-	};
-	useEffect(() => {
-		async function loadWorkOrderTasks() {
-			try {
-				setLoading(true);
-				const data = await fetch_work_order_tasks(workOrderId);
-				setTasks(data);
-			} catch (err) {
-				console.error("Error fetching work order tasks:", err);
-				setError("Failed to fetch work order tasks");
-				message.error("Failed to load tasks");
-			} finally {
-				setLoading(false);
-			}
-		}
+	const handleTaskSubmit = async (values) => {
+		try {
+			setTaskData((prev) => ({ ...prev, loading: true }));
+			const taskData = {
+				id_work_order: workOrderId,
+				task_id: values.task_id,
+				responsable: values.responsable,
+				priority: values.priority,
+				status: "To-do",
+				start_date: values.start_date?.toISOString(),
+				due_date: values.due_date?.toISOString(),
+				additional_comments: values.additional_comments,
+			};
 
+			await create_work_order_task(taskData);
+			message.success("Task created successfully");
+			handleModalVisibility("isAddTaskModalVisible", false);
+			await fetchTasks();
+		} catch (error) {
+			console.error("Error creating task:", error);
+			message.error(error.message || "Failed to create task");
+		} finally {
+			setTaskData((prev) => ({ ...prev, loading: false }));
+		}
+	};
+
+	const handleViewClick = (taskId) => {
+		const selectedTaskData = taskData.tasks.find(
+			(task) => task.task_id === taskId
+		);
+		setTaskData((prev) => ({ ...prev, selectedTask: selectedTaskData }));
+	};
+
+	const fetchTasks = async () => {
+		try {
+			setTaskData((prev) => ({ ...prev, loading: true }));
+			const data = await fetch_work_order_tasks(workOrderId);
+			setTaskData((prev) => ({
+				...prev,
+				tasks: data,
+				error: null,
+			}));
+		} catch (err) {
+			console.error("Error fetching work order tasks:", err);
+			setTaskData((prev) => ({
+				...prev,
+				error: "Failed to fetch work order tasks",
+			}));
+			message.error("Failed to load tasks");
+		} finally {
+			setTaskData((prev) => ({ ...prev, loading: false }));
+		}
+	};
+
+	useEffect(() => {
 		if (workOrderId) {
-			loadWorkOrderTasks();
+			fetchTasks();
 		}
 	}, [workOrderId]);
 
@@ -86,12 +132,7 @@ function Tasks() {
 		},
 		{
 			key: "2",
-			label: "Historial",
-			children: <History />,
-		},
-		{
-			key: "3",
-			label: "Tab adicional",
+			label: "Detalle",
 		},
 	];
 
@@ -99,26 +140,15 @@ function Tasks() {
 		switch (activeTab) {
 			case "1":
 				return (
-					<Row gutter={24}>
-						<Col span={12}>
-							<TasksTable
-								tasks={tasks}
-								loading={loading}
-								handleViewClick={handleViewClick}
-							/>
-						</Col>
-						<Col span={12}>
-							<AddAction
-								initialValues={selectedTask}
-								entityComments={entity_comments}
-								selectedTask={selectedTask}
-								performance={performance}
-							/>
-						</Col>
-					</Row>
+					<TaskTab
+						taskData={taskData}
+						handleViewClick={handleViewClick}
+						entity_comments={entity_comments}
+						wellState={wellState}
+					/>
 				);
 			case "2":
-				return <div>Grafico con el hisotrial del pozo</div>;
+				return <div>Detalle del pozo</div>;
 			case "3":
 				return <div></div>;
 			default:
@@ -126,76 +156,33 @@ function Tasks() {
 		}
 	};
 
-	const handleAddTask = async (values) => {
-		try {
-			const payload = {
-				id_work_order: parseInt(workOrderId),
-				task_id: parseInt(values.task_id),
-				responsable: values.responsable,
-				priority: values.priority,
-				status: values.status,
-				start_date: values.start_date.toISOString(),
-				due_date: values.due_date.toISOString(),
-				additional_comments: values.additional_comments,
-			};
-
-			// ... your API call code ...
-			setIsAddTaskModalVisible(false);
-			message.success("Task added successfully");
-		} catch (error) {
-			console.error("Error adding task:", error);
-			message.error("Failed to add task");
-		}
-	};
-
-	const fetchTasks = async () => {
-		try {
-			setLoading(true);
-			const data = await fetch_work_order_tasks(workOrderId);
-			setTasks(data);
-		} catch (err) {
-			console.error("Error fetching work order tasks:", err);
-			setError("Failed to fetch work order tasks");
-			message.error("Failed to load tasks");
-		} finally {
-			setLoading(false);
-		}
-	};
-
-	const handleTaskCreated = () => {
-		fetchTasks();
-	};
-
 	return (
 		<LayoutPage pageName={`${wellCode}`}>
 			<PageActions
 				entityId={wellCode}
-				performance={performance}
-				actionPlan={actionPlan}
-				showPerformanceModificationModal={openModal}
-				showAddTaskModal={setIsAddTaskModalVisible}
+				performance={wellState.performance}
+				actionPlan={wellState.actionPlan}
+				showPerformanceModificationModal={() =>
+					handleModalVisibility("isModalVisible", true)
+				}
+				onTaskSubmit={handleTaskSubmit}
 			/>
 
 			<Tabs
 				defaultActiveKey="1"
 				items={items}
 				style={{ padding: "0rem" }}
-				onChange={handleTabChange}
+				onChange={setActiveTab}
 			/>
 
 			{renderTabContent()}
 
 			<ChangePerformanceModal
-				visible={isModalVisible}
-				onCancel={() => setIsModalVisible(false)}
+				visible={modalStates.isModalVisible}
+				onCancel={() => handleModalVisibility("isModalVisible", false)}
 				onOk={handleStatusUpdate}
-				initialPerformance={performance}
-				initialActionPlan={actionPlan}
-			/>
-			<AddTaskModal
-				open={isAddTaskModalVisible}
-				onClose={() => setIsAddTaskModalVisible(false)}
-				onSuccess={handleTaskCreated}
+				initialPerformance={wellState.performance}
+				initialActionPlan={wellState.actionPlan}
 			/>
 		</LayoutPage>
 	);

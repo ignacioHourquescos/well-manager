@@ -10,27 +10,27 @@ import {
 	Row,
 	Col,
 } from "antd";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import FormItem from "../../../../../../components/common/FormItem";
-import {
-	fetch_task_descriptions_by_action_plan,
-	create_work_order_task,
-} from "../../../../../../services/general";
+import { fetch_task_descriptions_by_action_plan } from "../../../../../../services/general";
 
 const { TextArea } = Input;
 
-const AddTaskModal = ({ open, onClose, onSuccess }) => {
+const AddTaskModal = ({ open, onClose, onSubmit }) => {
 	const [form] = Form.useForm();
 	const [loading, setLoading] = useState(false);
-	const { workOrderId } = useParams();
 	const formValues = Form.useWatch([], form);
 	const [taskOptions, setTaskOptions] = useState([]);
+	const [searchParams] = useSearchParams();
+	const actionPlanId = searchParams.get("action_plan_id");
 
 	// Add this useEffect to fetch task descriptions when modal opens
 	useEffect(() => {
 		const fetchTaskDescriptions = async () => {
 			try {
-				const data = await fetch_task_descriptions_by_action_plan(2);
+				const data = await fetch_task_descriptions_by_action_plan(
+					parseInt(actionPlanId)
+				);
 
 				// Transform the data into options format for Select
 				const options = data.map((task) => ({
@@ -45,10 +45,10 @@ const AddTaskModal = ({ open, onClose, onSuccess }) => {
 			}
 		};
 
-		if (open) {
+		if (open && actionPlanId) {
 			fetchTaskDescriptions();
 		}
-	}, [open]);
+	}, [open, actionPlanId]);
 
 	// Calculate rows for TextArea
 	const calculateRows = useMemo(() => {
@@ -65,27 +65,12 @@ const AddTaskModal = ({ open, onClose, onSuccess }) => {
 		try {
 			setLoading(true);
 			const values = await form.validateFields();
-
-			const taskData = {
-				id_work_order: workOrderId,
-				task_id: values.task_id,
-				responsable: values.responsable,
-				priority: values.priority,
-				status: "TO DO",
-				start_date: values.start_date?.toISOString(),
-				due_date: values.due_date?.toISOString(),
-				additional_comments: values.additional_comments,
-			};
-
-			await create_work_order_task(taskData);
-
-			message.success("Task created successfully");
+			await onSubmit(values);
 			form.resetFields();
-			if (onSuccess) onSuccess();
 			onClose();
 		} catch (error) {
-			console.error("Error creating task:", error);
-			message.error(error.message || "Failed to create task");
+			console.error("Error submitting task:", error);
+			message.error(error.message || "Failed to submit task");
 		} finally {
 			setLoading(false);
 		}

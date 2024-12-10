@@ -10,7 +10,7 @@ const { Title } = Typography;
 const PageActions = ({
 	children,
 	showPerformanceModificationModal,
-	showAddTaskModal,
+	onTaskSubmit,
 	...props
 }) => {
 	const navigate = useNavigate();
@@ -64,7 +64,11 @@ const PageActions = ({
 				</Button>
 			</Styled.ButtonContainer>
 
-			<AddTaskModal open={isModalOpen} onClose={handleCloseModal} />
+			<AddTaskModal
+				open={isModalOpen}
+				onClose={handleCloseModal}
+				onSubmit={onTaskSubmit}
+			/>
 		</Styled.FlexContainer>
 	);
 };

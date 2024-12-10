@@ -82,3 +82,36 @@ export const create_work_order_task = async (taskData) => {
 		throw error;
 	}
 };
+
+export const fetch_task_by_id = async (taskId) => {
+	try {
+		const response = await axios.get(
+			process.env.REACT_APP_SERVICES + `/task/${taskId}`
+		);
+		return response.data;
+	} catch (error) {
+		console.error("Error fetching task details:", error);
+		throw error;
+	}
+};
+
+// Add this new function to your existing services
+export const update_task = async (taskData) => {
+	try {
+		const response = await axios.put(process.env.REACT_APP_SERVICES + "/task", {
+			id: taskData.id,
+			id_work_order: taskData.id_work_order,
+			task_id: taskData.task_id,
+			responsable: taskData.responsable,
+			priority: taskData.priority,
+			status: taskData.status,
+			start_date: taskData.start_date,
+			due_date: taskData.due_date,
+			additional_comments: taskData.additional_comments,
+		});
+		return response.data;
+	} catch (error) {
+		console.error("Error updating task:", error);
+		throw error;
+	}
+};

@@ -17,7 +17,7 @@ function TasksTable({ tasks, loading, handleViewClick }) {
 			title: "Tareas",
 			dataIndex: "tasks",
 			render: (text, record) => (
-				<a onClick={() => handleViewClick(record)}>Ver</a>
+				<a onClick={() => handleViewClick(record.id)}>Ver</a>
 			),
 		},
 	];

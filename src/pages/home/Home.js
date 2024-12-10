@@ -57,7 +57,7 @@ function Home() {
 			render: (text, record) => (
 				<Link
 					style={{ color: "#19519f", fontWeight: "600" }}
-					to={`/tasks/${record.code}/${record.id_well}/${record.id_work_order}`}
+					to={`/tasks/${record.code}/${record.id_well}/${record.id_work_order}?action_plan_id=${record.action_plan.id}`}
 				>
 					{record.code}
 				</Link>
@@ -71,7 +71,7 @@ function Home() {
 		{
 			title: "Action Plan",
 			dataIndex: "action_plan",
-			render: (action_plan) => action_plan,
+			render: (action_plan) => action_plan.name,
 		},
 		{
 			title: "Fecha",

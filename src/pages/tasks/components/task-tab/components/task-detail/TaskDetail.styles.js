@@ -7,7 +7,7 @@ export const Styled = {
 		padding-left: 0.5rem;
 		padding-right: 1.5rem;
 		position: relative;
-		height: 60vh; /* Full viewport height */
+		height: 70vh; /* Full viewport height */
 		overflow-y: auto; /* Enable vertical scrolling */
 		/* Webkit browsers (Chrome, Safari, newer versions of Edge) */
 		/* Webkit browsers (Chrome, Safari, newer versions of Edge) */
