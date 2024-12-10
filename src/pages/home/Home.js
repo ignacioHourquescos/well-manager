@@ -10,6 +10,9 @@ import LayoutPage from "../../components/layout/pages/LayoutPage";
 import { Link } from "react-router-dom";
 import SearchMenu from "./components/SearchMenu";
 import { useFilters } from "../../context/FilterContext";
+import { GiOilDrum } from "react-icons/gi";
+import { FaHouseFloodWater } from "react-icons/fa6";
+import { BsTrash3 } from "react-icons/bs";
 
 function Home() {
 	const [entities, setEntities] = useState([]);
@@ -72,6 +75,51 @@ function Home() {
 			title: "Action Plan",
 			dataIndex: "action_plan",
 			render: (action_plan) => action_plan.name,
+		},
+		{
+			title: "Type",
+			dataIndex: "well_type",
+			render: (well_type) => {
+				if (!well_type || well_type === "N/A") {
+					return "-";
+				}
+				return (
+					<div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+						{(() => {
+							switch (well_type) {
+								case "Oil Producer":
+									return <GiOilDrum style={{ fontSize: "1.2em" }} />;
+								case "Water Producer":
+									return <FaHouseFloodWater style={{ fontSize: "1.2em" }} />;
+								case "Water Injector":
+									return (
+										<FaHouseFloodWater
+											style={{
+												fontSize: "1.2em",
+												transform: "rotate(180deg)",
+											}}
+										/>
+									);
+								case "Disposal":
+									return <BsTrash3 style={{ fontSize: "1.2em" }} />;
+								default:
+									return null;
+							}
+						})()}
+						<span>{well_type}</span>
+					</div>
+				);
+			},
+		},
+		{
+			title: "Project",
+			dataIndex: "wf_project",
+			render: (wf_project) => wf_project,
+		},
+		{
+			title: "Destiantion plant",
+			dataIndex: "dest_plant",
+			render: (dest_plant) => dest_plant,
 		},
 		{
 			title: "Fecha",
@@ -157,7 +205,13 @@ function Home() {
 
 		if (filters.projects?.length > 0) {
 			filtered = filtered.filter((item) =>
-				filters.projects.includes(item.WF_project)
+				filters.projects.includes(item.wf_project)
+			);
+		}
+
+		if (filters.destinations?.length > 0) {
+			filtered = filtered.filter((item) =>
+				filters.destinations.includes(item.dest_plant)
 			);
 		}
 

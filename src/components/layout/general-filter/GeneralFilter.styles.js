@@ -36,11 +36,18 @@ export const Styled = {
 	ModalContent: styled.div`
 		display: flex;
 		gap: 24px;
+		height: 60vh;
 	`,
 
 	FilterColumn: styled.div`
 		flex: 1;
 		min-width: 200px;
+
+		.ant-checkbox-group {
+			display: flex;
+			flex-direction: column;
+			gap: 8px;
+		}
 	`,
 
 	FilterTag: styled(Tag)`
@@ -51,6 +58,16 @@ export const Styled = {
 		margin-right: 2px !important;
 		.anticon-close {
 			color: #666;
+		}
+
+		display: inline-flex;
+		align-items: center;
+		gap: 4px;
+
+		> div {
+			display: inline-flex;
+			align-items: center;
+			gap: 8px;
 		}
 	`,
 

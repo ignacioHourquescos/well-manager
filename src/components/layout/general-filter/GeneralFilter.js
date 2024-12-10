@@ -2,28 +2,87 @@ import React, { useState } from "react";
 import { Modal, Checkbox, Button, Tag, Title } from "antd";
 import { Styled } from "./GeneralFilter.styles";
 import { useFilters } from "../../../context/FilterContext";
+import { GiOilDrum } from "react-icons/gi";
+import { FaHouseFloodWater } from "react-icons/fa6";
+import { BsTrash3 } from "react-icons/bs";
 
 const wellTypeOptions = [
-	{ label: "Oil Producer", value: "Oil Producer" },
-	{ label: "Disposal", value: "Disposal" },
-	{ label: "Gas Producer", value: "Gas producer" },
+	{
+		label: (
+			<div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+				<GiOilDrum style={{ fontSize: "1.2em" }} />
+				<span>Oil Producer</span>
+			</div>
+		),
+		value: "Oil Producer",
+	},
+	{
+		label: (
+			<div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+				<BsTrash3 style={{ fontSize: "1.2em" }} />
+				<span>Disposal</span>
+			</div>
+		),
+		value: "Disposal",
+	},
+	{
+		label: (
+			<div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+				<FaHouseFloodWater style={{ fontSize: "1.2em" }} />
+				<span>Water Producer</span>
+			</div>
+		),
+		value: "Water Producer",
+	},
+	{
+		label: (
+			<div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+				<FaHouseFloodWater
+					style={{
+						fontSize: "1.2em",
+						transform: "rotate(180deg)",
+					}}
+				/>
+				<span>Water Injector</span>
+			</div>
+		),
+		value: "Water Injector",
+	},
 ];
 
 const bateriaOptionsRight = [
-	{ label: "Bateria 2", value: "bateria_2" },
-	{ label: "Bateria 4", value: "bateria_4" },
-	{ label: "Bateria 6", value: "bateria_6" },
-	{ label: "Bateria 8", value: "bateria_8" },
-	{ label: "Bateria 10", value: "bateria_10" },
-	{ label: "Bateria 12", value: "bateria_12" },
+	{ label: "PF-WM-001", value: "PF-WM-001" },
+	{ label: "PF-WM-002", value: "PF-WM-002" },
+	{ label: "PF-WM-003", value: "PF-WM-003" },
+	{ label: "PF-WM-004", value: "PF-WM-004" },
+	{ label: "PF-WM-005", value: "PF-WM-005" },
+	{ label: "PF-WM-006", value: "PF-WM-006" },
+	{ label: "PF-WM-007", value: "PF-WM-007" },
+	{ label: "PF-WM-008", value: "PF-WM-008" },
+	{ label: "PF-WM-009", value: "PF-WM-009" },
+	{ label: "PF-WM-010", value: "PF-WM-010" },
+	{ label: "PF-WM-011", value: "PF-WM-011" },
+	{ label: "PF-WM-012", value: "PF-WM-012" },
+	{ label: "PF-WM-013", value: "PF-WM-013" },
+	{ label: "PF-WM-014", value: "PF-WM-014" },
+	{ label: "PF-WM-015", value: "PF-WM-015" },
+	{ label: "PF-WM-016", value: "PF-WM-016" },
+	{ label: "PF-WM-017", value: "PF-WM-017" },
+	{ label: "PF-WM-018", value: "PF-WM-018" },
 ];
 
-const destinationOptions = Array.from({ length: 3 }, (_, i) => ({
-	label: `Destination ${i + 1}`,
-	value: `destination_${i + 1}`,
-}));
+const destinationOptions = [
+	{ label: "N/A", value: "N/A" },
+	{ label: "OTP-WM-001", value: "OTP-WM-001" },
+	{ label: "OTP-WM-002", value: "OTP-WM-002" },
+	{ label: "WIP-WM-001", value: "WIP-WM-001" },
+	{ label: "WIP-WM-003", value: "WIP-WM-003" },
+	{ label: "WIP-WM-004", value: "WIP-WM-004" },
+	{ label: "WTP-WM", value: "WTP-WM" },
+];
 
 const projectOptions = [
+	{ label: "Primary Producer", value: "Primary Producer" },
 	{ label: "WFP-001", value: "WFP-001" },
 	{ label: "WFP-003", value: "WFP-003" },
 	{ label: "WFP-004", value: "WFP-004" },
@@ -97,6 +156,11 @@ const GeneralFilter = () => {
 		}
 	};
 
+	// Split the options into two arrays for left and right columns
+	const halfLength = Math.ceil(bateriaOptionsRight.length / 2);
+	const leftColumnOptions = bateriaOptionsRight.slice(0, halfLength);
+	const rightColumnOptions = bateriaOptionsRight.slice(halfLength);
+
 	return (
 		<Styled.Header>
 			<Styled.FilterContainer>
@@ -156,29 +220,40 @@ const GeneralFilter = () => {
 						<Styled.FilterColumn>
 							<Styled.FilterSection>
 								<h4>Tipo de Pozo</h4>
-								<Checkbox.Group
-									options={wellTypeOptions}
-									value={selectedWellTypes}
-									onChange={handleWellTypeChange}
-									direction="vertical"
-								/>
+								<div style={{ paddingBottom: "0.5rem" }}>
+									<Checkbox.Group
+										options={wellTypeOptions}
+										value={selectedWellTypes}
+										onChange={handleWellTypeChange}
+										direction="vertical"
+									/>
+								</div>
 							</Styled.FilterSection>
 						</Styled.FilterColumn>
 
-						<Styled.FilterColumn>
+						{/*<Styled.FilterColumn>
 							<Styled.FilterSection>
 								<h4>Bateria</h4>
 								<Styled.BateriaSection>
 									<Styled.BateriaColumn>
 										<Checkbox.Group
-											options={bateriaOptionsRight}
+											options={leftColumnOptions}
 											value={selectedBaterias}
 											onChange={handleBateriaChange}
+											direction="vertical"
+										/>
+									</Styled.BateriaColumn>
+									<Styled.BateriaColumn>
+										<Checkbox.Group
+											options={rightColumnOptions}
+											value={selectedBaterias}
+											onChange={handleBateriaChange}
+											direction="vertical"
 										/>
 									</Styled.BateriaColumn>
 								</Styled.BateriaSection>
 							</Styled.FilterSection>
-						</Styled.FilterColumn>
+						</Styled.FilterColumn>*/}
 
 						<Styled.FilterColumn>
 							<Styled.FilterSection>
@@ -187,6 +262,7 @@ const GeneralFilter = () => {
 									options={destinationOptions}
 									value={selectedDestinations}
 									onChange={handleDestinationChange}
+									direction="vertical"
 								/>
 							</Styled.FilterSection>
 						</Styled.FilterColumn>
@@ -197,6 +273,7 @@ const GeneralFilter = () => {
 								options={projectOptions}
 								value={selectedProjects}
 								onChange={handleProjectChange}
+								direction="vertical"
 							/>
 						</Styled.FilterColumn>
 					</Styled.ModalContent>
