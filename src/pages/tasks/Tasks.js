@@ -101,6 +101,7 @@ function Tasks() {
 		try {
 			setTaskData((prev) => ({ ...prev, loading: true }));
 			const data = await fetch_work_order_tasks(workOrderId);
+			console.log("Fresh tasks data:", data);
 			setTaskData((prev) => ({
 				...prev,
 				tasks: data,
@@ -141,7 +142,10 @@ function Tasks() {
 			case "1":
 				return (
 					<TaskTab
-						taskData={taskData}
+						taskData={{
+							...taskData,
+							refresh: fetchTasks,
+						}}
 						handleViewClick={handleViewClick}
 						entity_comments={entity_comments}
 						wellState={wellState}

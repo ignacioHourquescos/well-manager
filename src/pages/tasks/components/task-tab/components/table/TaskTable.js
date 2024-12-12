@@ -11,7 +11,18 @@ function TasksTable({ tasks, loading, handleViewClick }) {
 			title: "Status",
 			dataIndex: "status",
 			key: "status",
-			render: (status) => <StatusTag status={status} />,
+			render: (status) => {
+				console.log("Rendering status:", status);
+				const statusOption = status_options.find(
+					(option) => option.value === status?.toLowerCase()
+				);
+				return (
+					<StatusTag
+						status={status?.toLowerCase()}
+						label={statusOption?.label || status}
+					/>
+				);
+			},
 		},
 		{
 			title: "Tareas",
@@ -31,6 +42,7 @@ function TasksTable({ tasks, loading, handleViewClick }) {
 				columns={columns}
 				pagination={{ pageSize: 11 }}
 				size="middle"
+				height={500}
 			/>
 		</Styled.Container>
 	);
@@ -38,25 +50,58 @@ function TasksTable({ tasks, loading, handleViewClick }) {
 
 export default TasksTable;
 
-const StatusTag = ({ status }) => {
+const StatusTag = ({ status, label }) => {
 	let color = "default";
 
-	switch (status) {
-		case "To Do":
-			color = null;
+	switch (status?.toLowerCase()) {
+		case "pending":
+			color = "orange";
 			break;
-		case "In Progress":
+		case "in_progress":
 			color = "blue";
 			break;
-		case "Done":
+		case "done":
 			color = "green";
 			break;
-		case "Block":
+		case "canceled":
 			color = "red";
+			break;
+		case "failed":
+			color = "purple";
+			break;
+		case "stand_by":
+			color = "gold";
 			break;
 		default:
 			color = "default";
 	}
 
-	return <Tag color={color}>{status}</Tag>;
+	return <Tag color={color}>{label}</Tag>;
 };
+
+const status_options = [
+	{
+		value: "pending",
+		label: "Pending",
+	},
+	{
+		value: "in_progress",
+		label: "In Progress",
+	},
+	{
+		value: "done",
+		label: "Done",
+	},
+	{
+		value: "canceled",
+		label: "Canceled",
+	},
+	{
+		value: "failed",
+		label: "Failed",
+	},
+	{
+		value: "stand_by",
+		label: "Stand By",
+	},
+];

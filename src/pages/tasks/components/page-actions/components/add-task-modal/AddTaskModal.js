@@ -101,7 +101,7 @@ const AddTaskModal = ({ open, onClose, onSubmit }) => {
 						<FormItem
 							label="Task"
 							name="task_id"
-							rules={[{ required: true, message: "Please select a task!" }]}
+							rules={[{ required: true, message: "Please select a task" }]}
 							value={formValues?.task_id}
 							inputComponent={
 								<Select options={taskOptions} loading={!taskOptions.length} />
@@ -118,12 +118,17 @@ const AddTaskModal = ({ open, onClose, onSubmit }) => {
 							rules={[
 								{
 									required: true,
-									message: "Please input the responsible person!",
+									message: "Please select the responsible person",
 								},
-								{ max: 50, message: "Maximum 50 characters" },
 							]}
 							value={formValues?.responsable}
-							inputComponent={<Input />}
+							inputComponent={
+								<Select
+									options={responsible_options}
+									placeholder=""
+									style={{ width: "100%" }}
+								/>
+							}
 						/>
 					</Col>
 
@@ -132,7 +137,7 @@ const AddTaskModal = ({ open, onClose, onSubmit }) => {
 							label="Priority"
 							name="priority"
 							rules={[
-								{ required: true, message: "Please select the priority!" },
+								{ required: true, message: "Please select the priority" },
 							]}
 							value={formValues?.priority}
 							inputComponent={<Select options={priority_options} />}
@@ -146,7 +151,7 @@ const AddTaskModal = ({ open, onClose, onSubmit }) => {
 							label="Start Date"
 							name="start_date"
 							rules={[
-								{ required: true, message: "Please select the start date!" },
+								{ required: true, message: "Please select the start date" },
 							]}
 							value={formValues?.start_date}
 							inputComponent={
@@ -213,5 +218,28 @@ const priority_options = [
 	{
 		value: "BAJA",
 		label: "Low",
+	},
+];
+
+const responsible_options = [
+	{
+		value: "Juan Perez",
+		label: "Juan Perez",
+	},
+	{
+		value: "Francisco Paz",
+		label: "Francisco Paz",
+	},
+	{
+		value: "Jorge Fernandez",
+		label: "Jorge Fernandez",
+	},
+	{
+		value: "Maria Gomez",
+		label: "Maria Gomez",
+	},
+	{
+		value: "Silvia Perez",
+		label: "Silvia Perez",
 	},
 ];

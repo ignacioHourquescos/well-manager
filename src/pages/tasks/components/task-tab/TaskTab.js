@@ -8,6 +8,7 @@ function TaskTab({ taskData, entity_comments, wellState }) {
 	const [selectedTask, setSelectedTask] = useState(null);
 	const [taskDetails, setTaskDetails] = useState(null);
 	const [loading, setLoading] = useState(false);
+	const [isTableUpdating, setIsTableUpdating] = useState(false);
 
 	const handleViewClick = async (taskId) => {
 		try {
@@ -28,14 +29,26 @@ function TaskTab({ taskData, entity_comments, wellState }) {
 
 	const refreshTasks = async () => {
 		try {
-			if (taskData.refresh) {
-				await taskData.refresh();
+			setIsTableUpdating(true);
+
+			// Call the parent's fetchTasks function
+			await taskData.refresh();
+
+			// Then refresh the selected task details if we have one
+			if (taskDetails) {
+				const updatedDetails = await fetch_task_by_id(taskDetails.id);
+				console.log("Updated task details:", updatedDetails);
+				setTaskDetails(updatedDetails);
+
+				if (updatedDetails) {
+					setSelectedTask(updatedDetails);
+				}
 			}
-			setSelectedTask(null);
-			setTaskDetails(null);
 		} catch (error) {
 			console.error("Error refreshing tasks:", error);
 			message.error("Failed to refresh tasks");
+		} finally {
+			setIsTableUpdating(false);
 		}
 	};
 

@@ -115,3 +115,15 @@ export const update_task = async (taskData) => {
 		throw error;
 	}
 };
+
+export const fetch_personal_tasks = async (responsable) => {
+	try {
+		const response = await axios.get(
+			process.env.REACT_APP_SERVICES + `/tasks/personal/${responsable}`
+		);
+		return response.data;
+	} catch (error) {
+		console.error("Error fetching personal tasks:", error);
+		throw error;
+	}
+};

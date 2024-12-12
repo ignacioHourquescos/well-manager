@@ -1,111 +1,175 @@
-import { Typography, Layout, Table } from "antd";
 import React, { useState, useEffect } from "react";
-import { fetch_wells } from "../../services/general";
+import { Table, Tag, Drawer } from "antd";
 import LayoutPage from "../../components/layout/pages/LayoutPage";
-import { Link } from "react-router-dom";
+import { fetch_personal_tasks } from "../../services/general";
+import dayjs from "dayjs";
+import TaskDetail from "../tasks/components/task-tab/components/task-detail/TaskDetail";
 
-const { Title } = Typography;
-const { Content } = Layout;
-
-function Home() {
-	const [entities, setEntities] = useState([]);
-	const [filteredEntities, setFilteredEntities] = useState([]);
+function PersonalTasks() {
+	const [tasks, setTasks] = useState([]);
 	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState(null);
+	const [selectedTask, setSelectedTask] = useState(null);
+	const [drawerVisible, setDrawerVisible] = useState(false);
+
+	const loadTasks = async () => {
+		try {
+			setLoading(true);
+			const data = await fetch_personal_tasks("Juan Perez");
+			console.log("Marcelino"); // Replace with actual user name
+			setTasks(data);
+		} catch (error) {
+			console.error("Error loading tasks:", error);
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	useEffect(() => {
+		loadTasks();
+	}, []);
+
+	const handleTaskClick = (record) => {
+		setSelectedTask(record);
+		setDrawerVisible(true);
+	};
 
 	const columns = [
 		{
-			title: "Entidad",
-			dataIndex: "entity",
-			render: (text, record) => <>{record.id}</>,
-		},
-		{
-			title: "Performance",
-			dataIndex: "performance",
-			render: (performance) => performance,
-		},
-		{
-			title: "Action Plan",
-			dataIndex: "action_plan",
-			render: (action_plan) => action_plan,
-		},
-		{
-			title: "Fecha",
-			dataIndex: "date",
-		},
-		{
-			title: "Indicators",
-			dataIndex: "indicators",
-		},
-		{
-			title: "Tareas",
-			dataIndex: "actions",
+			title: "Task",
+			dataIndex: "task_name",
+			key: "task_name",
 			render: (text, record) => (
-				<Link
-					to={`/tasks/${record.entity}?${record.performance}?${record.action_plan}`}
-				>
-					Ver
-				</Link>
+				<a onClick={() => handleTaskClick(record)}>{text}</a>
 			),
+		},
+		{
+			title: "Priority",
+			dataIndex: "priority",
+			key: "priority",
+		},
+		{
+			title: "Status",
+			dataIndex: "status",
+			key: "status",
+			render: (status) => {
+				const statusOption = status_options.find(
+					(option) => option.value === status?.toLowerCase()
+				);
+				return (
+					<StatusTag
+						status={status?.toLowerCase()}
+						label={statusOption?.label || status}
+					/>
+				);
+			},
+		},
+		{
+			title: "Start Date",
+			dataIndex: "start_date",
+			key: "start_date",
+			render: (date) => (date ? dayjs(date).format("DD/MM/YYYY") : "-"),
+		},
+		{
+			title: "Due Date",
+			dataIndex: "due_date",
+			key: "due_date",
+			render: (date) => (date ? dayjs(date).format("DD/MM/YYYY") : "-"),
+		},
+		{
+			title: "Well Code",
+			dataIndex: "well_code",
+			key: "well_code",
+		},
+		{
+			title: "Well Type",
+			dataIndex: "well_type",
+			key: "well_type",
+		},
+		{
+			title: "Project",
+			dataIndex: "well_project",
+			key: "well_project",
+		},
+		{
+			title: "Destination Plant",
+			dataIndex: "well_destination_plant",
+			key: "well_destination_plant",
 		},
 	];
 
-	useEffect(() => {
-		async function loadEntities() {
-			try {
-				const data = await fetch_wells();
-				setEntities(data);
-				setFilteredEntities(data);
-			} catch (err) {
-				setError("Failed to fetch articles");
-			} finally {
-				setLoading(false);
-			}
-		}
-		loadEntities();
-	}, []);
-
-	const filterEntities = (filters) => {
-		const { entity, performance, action_plan } = filters;
-		console.log(filters);
-
-		setLoading(true); // Start loading
-
-		// Simulate a delay between 100ms and 400ms
-		const delay = Math.floor(Math.random() * (800 - 250 + 1) + 100);
-
-		setTimeout(() => {
-			const filtered = entities.filter((item) => {
-				//prettier-ignore
-				return (
-					(entity? item.entity.toLowerCase().includes(entity.toLowerCase()): true) &&
-					(performance ? item.performance.code === performance : true) &&
-					(action_plan? item.action_plan.code.toLowerCase().includes(action_plan.toLowerCase()): true)
-				);
-			});
-			console.log(filtered);
-			setFilteredEntities(filtered);
-			setLoading(false); // Stop loading after filtering is done
-		}, delay);
-	};
-
 	return (
 		<LayoutPage
-			pageName="Mis Tareass"
-			secondaryTitle="Listado de Entidades"
+			pageName="My Tasks"
+			secondaryTitle="Personal Task List"
 			type="standard-layout"
 		>
-			<br />
-
 			<Table
-				columns={columns}
-				dataSource={filteredEntities}
-				size="middle"
-				pagination={{ pageSize: 13 }}
 				loading={loading}
+				dataSource={tasks}
+				columns={columns}
+				pagination={{ pageSize: 11 }}
+				size="middle"
+				rowKey="id"
 			/>
+
+			<Drawer
+				title="Task Details"
+				placement="right"
+				width={720}
+				onClose={() => setDrawerVisible(false)}
+				open={drawerVisible}
+			>
+				<TaskDetail
+					taskDetails={selectedTask}
+					loading={false}
+					onSuccess={() => {
+						setDrawerVisible(false);
+						// Refresh the tasks list
+						loadTasks();
+					}}
+				/>
+			</Drawer>
 		</LayoutPage>
 	);
 }
 
-export default Home;
+// Reusing the StatusTag component and status_options from TaskTable
+const StatusTag = ({ status, label }) => {
+	let color = "default";
+
+	switch (status?.toLowerCase()) {
+		case "pending":
+			color = "orange";
+			break;
+		case "in_progress":
+			color = "blue";
+			break;
+		case "done":
+			color = "green";
+			break;
+		case "canceled":
+			color = "red";
+			break;
+		case "failed":
+			color = "purple";
+			break;
+		case "stand_by":
+			color = "gold";
+			break;
+		default:
+			color = "default";
+	}
+
+	return <Tag color={color}>{label}</Tag>;
+};
+
+const status_options = [
+	{ value: "pending", label: "Pending" },
+	{ value: "in_progress", label: "In Progress" },
+	{ value: "done", label: "Done" },
+	{ value: "canceled", label: "Canceled" },
+	{ value: "failed", label: "Failed" },
+	{ value: "stand_by", label: "Stand By" },
+];
+
+export default PersonalTasks;

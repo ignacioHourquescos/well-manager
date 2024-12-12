@@ -7,34 +7,48 @@ import {
 	Select,
 	Row,
 	Col,
-	Timeline,
-	Typography,
 	Empty,
 	Spin,
 	message,
+	Typography,
+	Timeline,
 } from "antd";
 import { Styled } from "./TaskDetail.styles";
 import FormItem from "../../../../../../components/common/FormItem";
 import dayjs from "dayjs";
 import { update_task } from "../../../../../../services/general";
+
 const { TextArea } = Input;
 const { Title } = Typography;
 
-function TaskDetail({
-	initialValues,
-	entityComments,
-	selectedTask,
-	taskDetails,
-	loading,
-	performance,
-	onSuccess,
-}) {
+// Add the responsible options (you can move this to a shared constants file if needed)
+const responsible_options = [
+	{
+		value: "Juan Perez",
+		label: "Juan Perez",
+	},
+	{
+		value: "Francisco Paz",
+		label: "Francisco Paz",
+	},
+	{
+		value: "Jorge Fernandez",
+		label: "Jorge Fernandez",
+	},
+	{
+		value: "Maria Gomez",
+		label: "Maria Gomez",
+	},
+	{
+		value: "Silvia Perez",
+		label: "Silvia Perez",
+	},
+];
+
+function TaskDetail({ initialValues, taskDetails, loading, onSuccess }) {
 	const [form] = Form.useForm();
-	const [newTask, setNewTask] = useState(false);
+	const [isUpdating, setIsUpdating] = useState(false);
 	const formValues = Form.useWatch([], form);
-	const onFinish = (values) => {
-		console.log(values);
-	};
 
 	useEffect(() => {
 		if (taskDetails) {
@@ -67,25 +81,24 @@ function TaskDetail({
 
 	const handleSubmit = async (values) => {
 		try {
-			// Validate required fields before submitting
 			if (!values.task) {
 				message.error("Task is required");
 				return;
 			}
 
+			setIsUpdating(true);
+
 			const taskData = {
 				id: taskDetails.id,
 				id_work_order: taskDetails.id_work_order,
-				task_id: parseInt(taskDetails.id), // Make sure task_id is a number and not null
+				task_id: parseInt(taskDetails.id),
 				responsable: values.responsable || "",
 				priority: values.priority || "",
-				status: values.status || "todo",
+				status: values.status || "pending",
 				start_date: values.startDate ? values.startDate.toISOString() : null,
 				due_date: values.dueDate ? values.dueDate.toISOString() : null,
 				additional_comments: values.notes || "",
 			};
-
-			console.log("Submitting task data:", taskData); // Debug log
 
 			await update_task(taskData);
 			message.success("Task updated successfully");
@@ -98,6 +111,8 @@ function TaskDetail({
 			message.error(
 				"Failed to update task: " + (error.message || "Unknown error")
 			);
+		} finally {
+			setIsUpdating(false);
 		}
 	};
 
@@ -133,8 +148,13 @@ function TaskDetail({
 								label="Responsable"
 								name="responsable"
 								value={formValues?.responsable}
-								rules={[{ max: 50, message: "Máximo 50 caracteres" }]}
-								inputComponent={<Input />}
+								inputComponent={
+									<Select
+										options={responsible_options}
+										placeholder="Select responsible person"
+										style={{ width: "100%" }}
+									/>
+								}
 							/>
 						</Col>
 						<Col span={8}>
@@ -199,8 +219,9 @@ function TaskDetail({
 					</Row>
 				</>
 
-				{/*<Title level={5}>Comentarios</Title>
-				<br /><Timeline
+				<Title level={5}>Comentarios</Title>
+				<br />
+				<Timeline
 					items={(() => {
 						// Original comments array
 
@@ -218,29 +239,44 @@ function TaskDetail({
 							Math.floor(Math.random() * entityComments.length) + 1;
 
 						// Shuffle and slice the array
-						return shuffleArray([...entityComments]).slice(0, randomLength);
+						return entityComments;
 					})()}
-				/>*/}
+				/>
 
 				<Form.Item style={{ position: "absolute", right: 0 }}>
 					<Styled.ButtonContainer>
 						<Row gutter={12}>
 							<Button
-								color="danger"
+								color="primary"
 								variant="outlined"
 								htmlType="submit"
-								style={{ marginRight: "20px" }}
+								loading={isUpdating}
+								disabled={isUpdating}
 							>
-								Eliminar Tarea
-							</Button>
-
-							<Button color="primary" variant="outlined" htmlType="submit">
-								Guardar Tarea
+								{isUpdating ? "Guardando..." : "Guardar Tarea"}
 							</Button>
 						</Row>
 					</Styled.ButtonContainer>
 				</Form.Item>
 			</Form>
+			{isUpdating && (
+				<div
+					style={{
+						position: "absolute",
+						top: 0,
+						left: 0,
+						right: 0,
+						bottom: 0,
+						background: "rgb(250, 250, 250, 0.7)",
+						display: "flex",
+						justifyContent: "center",
+						alignItems: "center",
+						zIndex: 1000,
+					}}
+				>
+					<Spin size="large" tip="Actualizando tarea..." />
+				</div>
+			)}
 		</Styled.Container>
 	);
 }
@@ -295,8 +331,8 @@ const priority_options = [
 
 const status_options = [
 	{
-		value: "todo",
-		label: "To Do",
+		value: "pending",
+		label: "Pending",
 	},
 	{
 		value: "in_progress",
@@ -307,7 +343,92 @@ const status_options = [
 		label: "Done",
 	},
 	{
-		value: "blocked",
-		label: "Blocked",
+		value: "canceled",
+		label: "Canceled",
+	},
+	{
+		value: "failed",
+		label: "Failed",
+	},
+	{
+		value: "stand_by",
+		label: "Stand By",
+	},
+];
+
+const entityComments = [
+	{
+		color: "gray",
+		children: (
+			<>
+				<h4 style={{ margin: 0, padding: 0 }}>
+					Carlos Rodríguez{" "}
+					<span style={{ fontWeight: "normal" }}>(2023-05-18 14:30)</span>
+				</h4>
+				<p style={{ margin: 0, padding: 0 }}>
+					Observado disminución en la tasa de producción del pozo #3.
+				</p>
+			</>
+		),
+	},
+	{
+		color: "gray",
+		children: (
+			<>
+				<h4 style={{ margin: 0, padding: 0 }}>
+					Ana María Gómez{" "}
+					<span style={{ fontWeight: "normal" }}>(2023-05-20 09:15)</span>
+				</h4>
+				<p style={{ margin: 0, padding: 0 }}>
+					Realizada prueba de presión de rutina en el pozo #7. Resultados
+					normales.
+				</p>
+			</>
+		),
+	},
+	{
+		color: "gray",
+		children: (
+			<>
+				<h4 style={{ margin: 0, padding: 0 }}>
+					Javier Fernández{" "}
+					<span style={{ fontWeight: "normal" }}>(2023-05-25 11:45)</span>
+				</h4>
+				<p style={{ margin: 0, padding: 0 }}>
+					Iniciado trabajo de reacondicionamiento para reemplazar la bomba de
+					fondo en el pozo #5.
+				</p>
+			</>
+		),
+	},
+	{
+		color: "gray",
+		children: (
+			<>
+				<h4 style={{ margin: 0, padding: 0 }}>
+					Elena Martínez{" "}
+					<span style={{ fontWeight: "normal" }}>(2023-06-02 16:20)</span>
+				</h4>
+				<p style={{ margin: 0, padding: 0 }}>
+					Completado tratamiento de acidificación para mejorar la permeabilidad
+					del pozo #2.
+				</p>
+			</>
+		),
+	},
+	{
+		color: "gray",
+		children: (
+			<>
+				<h4 style={{ margin: 0, padding: 0 }}>
+					Ricardo Sánchez{" "}
+					<span style={{ fontWeight: "normal" }}>(2023-06-10 13:05)</span>
+				</h4>
+				<p style={{ margin: 0, padding: 0 }}>
+					Ajustado el tamaño del estrangulador para optimizar la tasa de flujo
+					del pozo #9.
+				</p>
+			</>
+		),
 	},
 ];
