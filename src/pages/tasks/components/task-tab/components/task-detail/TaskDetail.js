@@ -16,7 +16,11 @@ import {
 import { Styled } from "./TaskDetail.styles";
 import FormItem from "../../../../../../components/common/FormItem";
 import dayjs from "dayjs";
-import { update_task } from "../../../../../../services/general";
+import {
+	update_task,
+	fetch_task_statuses,
+} from "../../../../../../services/general";
+import { GiConsoleController } from "react-icons/gi";
 
 const { TextArea } = Input;
 const { Title } = Typography;
@@ -49,6 +53,7 @@ function TaskDetail({ initialValues, taskDetails, loading, onSuccess }) {
 	const [form] = Form.useForm();
 	const [isUpdating, setIsUpdating] = useState(false);
 	const formValues = Form.useWatch([], form);
+	const [statusOptions, setStatusOptions] = useState([]);
 
 	useEffect(() => {
 		if (taskDetails) {
@@ -68,6 +73,23 @@ function TaskDetail({ initialValues, taskDetails, loading, onSuccess }) {
 			form.setFieldsValue(initialValues);
 		}
 	}, [taskDetails, initialValues, form]);
+
+	useEffect(() => {
+		const getStatusOptions = async () => {
+			try {
+				const statuses = await fetch_task_statuses();
+				const formattedOptions = statuses.map((status) => ({
+					value: status.code,
+					label: status.label,
+				}));
+				setStatusOptions(formattedOptions);
+			} catch (error) {
+				console.error("Failed to fetch task statuses:", error);
+			}
+		};
+
+		getStatusOptions();
+	}, []);
 
 	//CALCULA LA CANIDAD DE FILAS PARA NOTAS
 	const calculateRows = useMemo(() => {
@@ -91,7 +113,7 @@ function TaskDetail({ initialValues, taskDetails, loading, onSuccess }) {
 			const taskData = {
 				id: taskDetails.id,
 				id_work_order: taskDetails.id_work_order,
-				task_id: parseInt(taskDetails.id),
+				task_id: parseInt(taskDetails.task_id),
 				responsable: values.responsable || "",
 				priority: values.priority || "",
 				status: values.status || "pending",
@@ -174,7 +196,7 @@ function TaskDetail({ initialValues, taskDetails, loading, onSuccess }) {
 								name="status"
 								width="100%"
 								value={formValues?.status}
-								inputComponent={<Select allowClear options={status_options} />}
+								inputComponent={<Select allowClear options={statusOptions} />}
 							/>
 						</Col>
 					</Row>
@@ -326,33 +348,6 @@ const priority_options = [
 	{
 		value: "low",
 		label: "Low",
-	},
-];
-
-const status_options = [
-	{
-		value: "pending",
-		label: "Pending",
-	},
-	{
-		value: "in_progress",
-		label: "In Progress",
-	},
-	{
-		value: "done",
-		label: "Done",
-	},
-	{
-		value: "canceled",
-		label: "Canceled",
-	},
-	{
-		value: "failed",
-		label: "Failed",
-	},
-	{
-		value: "stand_by",
-		label: "Stand By",
 	},
 ];
 

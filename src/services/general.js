@@ -1,15 +1,19 @@
 import axios from "axios";
 
-export async function fetch_wells() {
-	//return entity;
+export const fetch_wells = async (wellId) => {
 	try {
-		const response = await axios.get(process.env.REACT_APP_SERVICES + "/wells");
-		return response.data;
+		// Construct the URL with the optional wellId as a query parameter
+		const url =
+			process.env.REACT_APP_SERVICES +
+			`/wells${wellId ? `?wellId=${wellId}` : ""}`;
+
+		const response = await axios.get(url); // Make the GET request
+		return response.data; // Return the data from the response
 	} catch (error) {
-		console.error("Error fetching entities:", error);
-		throw error;
+		console.error("Error fetching wells:", error);
+		throw error; // Rethrow the error for handling in the calling function
 	}
-}
+};
 
 export async function fetch_performance() {
 	try {
@@ -125,5 +129,17 @@ export const fetch_personal_tasks = async (responsable) => {
 	} catch (error) {
 		console.error("Error fetching personal tasks:", error);
 		throw error;
+	}
+};
+
+export const fetch_task_statuses = async () => {
+	try {
+		const response = await axios.get(
+			process.env.REACT_APP_SERVICES + "/tasks/status"
+		);
+		return response.data; // Return the data from the response
+	} catch (error) {
+		console.error("Error fetching task statuses:", error);
+		throw error; // Rethrow the error for handling in the calling function
 	}
 };

@@ -11,6 +11,7 @@ const PageActions = ({
 	children,
 	showPerformanceModificationModal,
 	onTaskSubmit,
+	currentWellData,
 	...props
 }) => {
 	const navigate = useNavigate();
@@ -35,14 +36,16 @@ const PageActions = ({
 				{props.entityId}
 			</Styled.PageTitle>
 			<Styled.StatisticsContainer>
+				{/* Remove the button code from here */}
 				<Statistic
 					title="Performance"
-					value={props.performance}
+					value={currentWellData[0]?.performance}
 					valueRender={(value) => <Title level={5}>{value}</Title>}
 				/>
+
 				<Statistic
 					title="Action Plan"
-					value={props.actionPlan}
+					value={currentWellData[0]?.action_plan?.name}
 					valueRender={(value) => <Title level={5}>{value}</Title>}
 				/>
 			</Styled.StatisticsContainer>

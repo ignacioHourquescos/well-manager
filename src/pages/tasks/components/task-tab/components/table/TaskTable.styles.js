@@ -5,6 +5,6 @@ export const Styled = {
 		padding: 0 1rem;
 		border-right: 1px solid #e8e8e8;
 		padding-right: 2rem;
-		height: 80vh;
+		height: 75vh;
 	`,
 };

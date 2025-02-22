@@ -22,7 +22,13 @@ const PageTitle = styled.div`
 `;
 
 const ButtonContainer = styled.div`
-	transform: translateY(20px);
+	transform: translateY(10px);
+	display: flex;
+	justify-content: space-between;
+	gap: 30px;
+
+	padding: 0 20px;
+	border-left: 1px solid #f0f0f0;
 `;
 
 export const Styled = {

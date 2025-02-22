@@ -4,17 +4,18 @@ import { useParams, useNavigate } from "react-router-dom";
 import LayoutPage from "../../components/layout/pages/LayoutPage";
 import PageActions from "./components/page-actions/PageActions";
 import ChangePerformanceModal from "./components/change-performance-modal/ChangePerformanceModal";
+import FullScreenLoader from "../../components/common/FullScreenLoader";
 
 import {
 	update_well_performance,
 	fetch_work_order_tasks,
 	create_work_order_task,
+	fetch_wells,
 } from "../../services/general";
 import TaskTab from "./components/task-tab/TaskTab";
 
 function Tasks() {
 	const { wellId, wellCode, workOrderId } = useParams();
-	const navigate = useNavigate();
 
 	const [modalStates, setModalStates] = useState({
 		isModalVisible: false,
@@ -35,6 +36,9 @@ function Tasks() {
 
 	const [activeTab, setActiveTab] = useState("1");
 
+	const [currentWellData, setCurrentWellData] = useState({});
+	const [loading, setLoading] = useState(false);
+
 	const handleModalVisibility = (modalType, isVisible) => {
 		setModalStates((prev) => ({
 			...prev,
@@ -43,6 +47,7 @@ function Tasks() {
 	};
 
 	const handleStatusUpdate = async (values) => {
+		setLoading(true);
 		try {
 			await update_well_performance(
 				parseInt(wellId),
@@ -57,10 +62,15 @@ function Tasks() {
 
 			handleModalVisibility("isModalVisible", false);
 			message.success("Well status updated successfully");
-			navigate("/");
+
+			// Refresh the current well data
+			const data = await fetch_wells(wellId); // Fetch the updated well data
+			setCurrentWellData(data); // Update the state with the new data
 		} catch (error) {
 			console.error("Failed to update well status:", error);
 			message.error("Failed to update well status");
+		} finally {
+			setLoading(false);
 		}
 	};
 
@@ -72,7 +82,7 @@ function Tasks() {
 				task_id: values.task_id,
 				responsable: values.responsable,
 				priority: values.priority,
-				status: "To-do",
+				status: "to_do",
 				start_date: values.start_date?.toISOString(),
 				due_date: values.due_date?.toISOString(),
 				additional_comments: values.additional_comments,
@@ -104,7 +114,8 @@ function Tasks() {
 			console.log("Fresh tasks data:", data);
 			setTaskData((prev) => ({
 				...prev,
-				tasks: data,
+				tasks: data.tasks,
+				statusSummary: data.statusSummary,
 				error: null,
 			}));
 		} catch (err) {
@@ -124,6 +135,26 @@ function Tasks() {
 			fetchTasks();
 		}
 	}, [workOrderId]);
+
+	useEffect(() => {
+		console.log("USE effect para buscar data especifica del well", wellId);
+		const fetchWellData = async () => {
+			setLoading(true);
+			try {
+				const data = await fetch_wells(wellId);
+				setCurrentWellData(data);
+				console.log("CURRENT WELL DATA", data);
+			} catch (error) {
+				console.error("Error fetching well data:", error);
+			} finally {
+				setLoading(false);
+			}
+		};
+
+		if (wellId) {
+			fetchWellData();
+		}
+	}, [wellId]);
 
 	const items = [
 		{
@@ -170,6 +201,7 @@ function Tasks() {
 					handleModalVisibility("isModalVisible", true)
 				}
 				onTaskSubmit={handleTaskSubmit}
+				currentWellData={currentWellData}
 			/>
 
 			<Tabs
@@ -188,6 +220,16 @@ function Tasks() {
 				initialPerformance={wellState.performance}
 				initialActionPlan={wellState.actionPlan}
 			/>
+
+			{loading && <FullScreenLoader />}
+			{currentWellData && (
+				<div>
+					<h1>{currentWellData.description}</h1>
+					{currentWellData.action_plan && (
+						<h2>Action Plan: {currentWellData.action_plan.name}</h2>
+					)}
+				</div>
+			)}
 		</LayoutPage>
 	);
 }

@@ -1,14 +1,53 @@
 import React, { useState, useEffect } from "react";
-import { Row, Col, message } from "antd";
+import { Row, Col, message, Button, Table, Statistic } from "antd";
 import TasksTable from "./components/table/TaskTable";
 import TaskDetail from "./components/task-detail/TaskDetail";
-import { fetch_task_by_id } from "../../../../services/general";
+import {
+	fetch_task_by_id,
+	fetch_task_statuses,
+} from "../../../../services/general";
 
-function TaskTab({ taskData, entity_comments, wellState }) {
+function TaskTab({ taskData, entity_comments, wellState, onAddTask }) {
 	const [selectedTask, setSelectedTask] = useState(null);
 	const [taskDetails, setTaskDetails] = useState(null);
 	const [loading, setLoading] = useState(false);
 	const [isTableUpdating, setIsTableUpdating] = useState(false);
+	const [statusMapping, setStatusMapping] = useState({});
+	const [statusCounts, setStatusCounts] = useState({ OPEN: 0, CLOSED: 0 });
+
+	useEffect(() => {
+		const getStatusMapping = async () => {
+			try {
+				const statuses = await fetch_task_statuses();
+				const mapping = {};
+				statuses.forEach((status) => {
+					mapping[status.code] = status.type;
+				});
+				setStatusMapping(mapping);
+			} catch (error) {
+				console.error("Failed to fetch task statuses:", error);
+			}
+		};
+
+		getStatusMapping();
+	}, []);
+
+	useEffect(() => {
+		const calculateStatusCounts = () => {
+			const counts = { OPEN: 0, CLOSED: 0 };
+			taskData.tasks.forEach((task) => {
+				const statusType = statusMapping[task.status] || "Unknown";
+				if (statusType === "OPEN") {
+					counts.OPEN += 1;
+				} else if (statusType === "CLOSED") {
+					counts.CLOSED += 1;
+				}
+			});
+			setStatusCounts(counts);
+		};
+
+		calculateStatusCounts();
+	}, [taskData, statusMapping]);
 
 	const handleViewClick = async (taskId) => {
 		try {
@@ -55,6 +94,15 @@ function TaskTab({ taskData, entity_comments, wellState }) {
 	return (
 		<Row gutter={24}>
 			<Col span={12}>
+				<Row gutter={16}>
+					<Col span={10}>
+						<span>OPEN TASKS - {statusCounts.OPEN}</span>
+					</Col>
+					<Col span={12}>
+						<span>CLOSED TASKS - {statusCounts.CLOSED}</span>
+					</Col>
+				</Row>
+
 				<TasksTable
 					tasks={taskData.tasks}
 					loading={taskData.loading}

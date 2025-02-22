@@ -1,10 +1,26 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Table, Tag, Typography } from "antd";
 import { Styled } from "./TaskTable.styles";
+import { fetch_task_statuses } from "../../../../../../services/general";
 
 const { Title } = Typography;
 
 function TasksTable({ tasks, loading, handleViewClick }) {
+	const [statusOptions, setStatusOptions] = useState([]);
+
+	useEffect(() => {
+		const getStatusOptions = async () => {
+			try {
+				const statuses = await fetch_task_statuses();
+				setStatusOptions(statuses);
+			} catch (error) {
+				console.error("Failed to fetch task statuses:", error);
+			}
+		};
+
+		getStatusOptions();
+	}, []);
+
 	const columns = [
 		{ title: "Task", dataIndex: "task_name", key: "task", width: "70%" },
 		{
@@ -13,8 +29,8 @@ function TasksTable({ tasks, loading, handleViewClick }) {
 			key: "status",
 			render: (status) => {
 				console.log("Rendering status:", status);
-				const statusOption = status_options.find(
-					(option) => option.value === status?.toLowerCase()
+				const statusOption = statusOptions.find(
+					(option) => option.code === status?.toLowerCase()
 				);
 				return (
 					<StatusTag
@@ -78,30 +94,3 @@ const StatusTag = ({ status, label }) => {
 
 	return <Tag color={color}>{label}</Tag>;
 };
-
-const status_options = [
-	{
-		value: "pending",
-		label: "Pending",
-	},
-	{
-		value: "in_progress",
-		label: "In Progress",
-	},
-	{
-		value: "done",
-		label: "Done",
-	},
-	{
-		value: "canceled",
-		label: "Canceled",
-	},
-	{
-		value: "failed",
-		label: "Failed",
-	},
-	{
-		value: "stand_by",
-		label: "Stand By",
-	},
-];
