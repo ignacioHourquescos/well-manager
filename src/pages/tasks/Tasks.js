@@ -13,6 +13,7 @@ import {
 	fetch_wells,
 } from "../../services/general";
 import TaskTab from "./components/task-tab/TaskTab";
+import WellDetailTab from "./components/tab-well-detail/WellDetailTab";
 
 function Tasks() {
 	const { wellId, wellCode, workOrderId } = useParams();
@@ -183,7 +184,11 @@ function Tasks() {
 					/>
 				);
 			case "2":
-				return <div>Detalle del pozo</div>;
+				return (
+					<div>
+						<WellDetailTab currentWellData={currentWellData[0]} />
+					</div>
+				);
 			case "3":
 				return <div></div>;
 			default:

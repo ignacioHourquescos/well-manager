@@ -275,7 +275,7 @@ function TaskDetail({ initialValues, taskDetails, loading, onSuccess }) {
 								loading={isUpdating}
 								disabled={isUpdating}
 							>
-								{isUpdating ? "Guardando..." : "Guardar Tarea"}
+								{isUpdating ? "Guardando..." : "Guardar Cambios"}
 							</Button>
 						</Row>
 					</Styled.ButtonContainer>
